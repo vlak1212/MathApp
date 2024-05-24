@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#f5f5f5">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        android:background="#e0e0e0"
+        android:contentDescription="Image preview"
+        android:elevation="4dp" />
+
+    <EditText
+        android:id="@+id/editTextResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_marginBottom="16dp"
+        android:hint="Kết quả"
+        android:inputType="textMultiLine"
+        android:gravity="top|start"
+        android:scrollbars="vertical"
+        android:minHeight="150dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:elevation="4dp"
+        android:scrollHorizontally="false"
+        android:maxLines="10"
+        android:imeOptions="flagNoEnterAction"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextResult"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/button_capture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Chụp ảnh"
+            android:backgroundTint="#6200EE"
+            android:textColor="#FFFFFF"
+            android:elevation="4dp"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/button_upload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Tải ảnh lên"
+            android:backgroundTint="#03DAC5"
+            android:textColor="#FFFFFF"
+            android:elevation="4dp"
+            android:padding="12dp" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/button_calculator"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="16dp"
+        android:background="@null"
+        android:src="@drawable/calculator"
+        android:contentDescription="Calculator"
+        android:elevation="8dp"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

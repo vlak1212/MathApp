@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/app/src/androidTest/java/com/example/ocr2/ExampleInstrumentedTest.java;E:/android/code/ocr2/app/src/main/java/com/example/ocr2/MainActivity.java;E:/android/code/ocr2/app/src/main/java/com/example/ocr2/TesseractOCR.java;E:/android/code/ocr2/app/src/main/res/drawable/edit_text_background.xml;E:/android/code/ocr2/app/src/main/res/drawable/ic_launcher_background.xml;E:/android/code/ocr2/app/src/main/res/drawable/ic_launcher_foreground.xml;E:/android/code/ocr2/app/src/main/res/layout/activity_main.xml;E:/android/code/ocr2/app/src/main/res/mipmap-anydpi/ic_launcher.xml;E:/android/code/ocr2/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml;E:/android/code/ocr2/app/src/main/res/values/colors.xml;E:/android/code/ocr2/app/src/main/res/values/strings.xml;E:/android/code/ocr2/app/src/main/res/values/themes.xml;E:/android/code/ocr2/app/src/main/res/values-night/themes.xml;E:/android/code/ocr2/app/src/main/res/xml/backup_rules.xml;E:/android/code/ocr2/app/src/main/res/xml/data_extraction_rules.xml;E:/android/code/ocr2/app/src/main/AndroidManifest.xml;E:/android/code/ocr2/app/src/test/java/com/example/ocr2/ExampleUnitTest.java" />
+  </component>
+</project>
