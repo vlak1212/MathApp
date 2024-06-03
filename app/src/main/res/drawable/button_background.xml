@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?attr/colorControlHighlight">
-    <item android:id="@android:id/mask">
-        <shape android:shape="rectangle">
-            <solid android:color="?android:attr/colorAccent" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#3700B3" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item>
-        <shape android:shape="rectangle">
-            <solid android:color="?android:attr/colorButtonNormal" />
-            <corners android:radius="28dp" />
+        <shape>
+            <solid android:color="?attr/colorPrimary" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
-</ripple>
+</selector>

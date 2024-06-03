@@ -3,6 +3,7 @@ package com.example.ocr2;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,14 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -23,6 +32,8 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.squareup.picasso.Picasso;
 import java.io.IOException;
+import java.util.concurrent.Executor;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_PICK = 2;
     private ImageView imageView;
     private EditText editTextResult;
+
+    private EditText editResult;
     private Button captureBtn;
+    private Bitmap img;
+    private String txt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageView);
         editTextResult = findViewById(R.id.editTextResult);
+        editResult = findViewById(R.id.editResult);
         Button buttonCapture = findViewById(R.id.button_capture);
         Button buttonUpload = findViewById(R.id.button_upload);
         ImageButton buttonCalculator = findViewById(R.id.button_calculator);
@@ -78,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                img = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(imageBitmap);
                 processImage(InputImage.fromBitmap(imageBitmap, 0));
             } else if (requestCode == REQUEST_IMAGE_PICK) {
@@ -103,9 +121,33 @@ public class MainActivity extends AppCompatActivity {
         recognizer.process(image)
                 .addOnSuccessListener(result -> {
                     String resultText = processTextRecognitionResult(result);
-                    editTextResult.setText(resultText);
+                    txt = processTextRecognitionResult(result);
+                    editTextResult.setText(txt);
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
+        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
+                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+        Bitmap askImg = img;
+        Content content = new Content.Builder()
+                .addText("Chỉ trả lời kết quả của bài toán trong ảnh, không cần giải thích")
+                .addImage(img)
+                .build();
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+                @Override
+                public void onSuccess(GenerateContentResponse result) {
+                    String resultText = result.getText();
+                    editTextResult.setText(resultText);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            }, this.getMainExecutor());
+        }
     }
 
     private String processTextRecognitionResult(Text text) {
@@ -117,4 +159,30 @@ public class MainActivity extends AppCompatActivity {
         }
         return resultText.toString();
     }
+
+//    private void hoiGemini(Bitmap img) {
+//        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
+//                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+//        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+//        Bitmap askImg = img;
+//        Content content = new Content.Builder()
+//                .addText("Chỉ trả lời kết quả của bài toán trong ảnh, không cần giải thích")
+//                .addImage(img)
+//                .build();
+//        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+//                @Override
+//                public void onSuccess(GenerateContentResponse result) {
+//                    String resultText = result.getText();
+//                    editTextResult.setText(resultText);
+//                }
+//
+//                @Override
+//                public void onFailure(Throwable t) {
+//                    t.printStackTrace();
+//                }
+//            }, this.getMainExecutor());
+//        }
+//    }
 }

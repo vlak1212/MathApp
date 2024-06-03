@@ -35,6 +35,7 @@ android {
 
 dependencies {
     implementation ("com.google.mlkit:text-recognition:16.0.0")
+    // implementation ("com.google.android.gms:play-services-gemini:1.0.0")
     // implementation("com.google.mlkit:ocr:16.0.0")
     // implementation("com.google.android.gms:play-services-mlkit-text-recognition:18.0.0")
     // implementation("org.tensorflow:tensorflow-lite:0.0.0-nightly")
@@ -46,5 +47,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.rmtheis:tess-two:9.0.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+    implementation("com.google.guava:guava:31.0.1-android")
+    implementation("org.reactivestreams:reactive-streams:1.0.4")
 
 }

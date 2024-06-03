@@ -7,77 +7,96 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="396dp"
+        android:layout_height="409dp"
         android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop"
         android:background="#e0e0e0"
         android:contentDescription="Image preview"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        android:scaleType="centerCrop" />
 
     <EditText
         android:id="@+id/editTextResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="382dp"
+        android:layout_height="130dp"
         android:layout_below="@id/imageView"
         android:layout_marginBottom="16dp"
-        android:hint="Kết quả"
-        android:inputType="textMultiLine"
-        android:gravity="top|start"
-        android:scrollbars="vertical"
-        android:minHeight="150dp"
         android:background="@drawable/edit_text_background"
-        android:padding="12dp"
-        android:textSize="16sp"
         android:elevation="4dp"
-        android:scrollHorizontally="false"
-        android:maxLines="10"
+        android:gravity="top|start"
+        android:hint="Bài toán"
         android:imeOptions="flagNoEnterAction"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:inputType="textMultiLine"
+        android:maxLines="10"
+        android:minHeight="150dp"
+        android:padding="12dp"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
+    <EditText
+        android:id="@+id/editResult"
+        android:layout_width="382dp"
+        android:layout_height="130dp"
+        android:layout_below="@id/editTextResult"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edit_text_background"
+        android:elevation="4dp"
+        android:gravity="top|start"
+        android:hint="Kết quả"
+        android:imeOptions="flagNoEnterAction"
+        android:inputType="textMultiLine"
+        android:maxLines="10"
+        android:minHeight="150dp"
+        android:padding="12dp"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextResult"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_width="404dp"
+        android:layout_height="68dp"
+        android:layout_below="@id/editResult"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_capture"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Chụp ảnh"
+            android:layout_weight="1"
             android:backgroundTint="#6200EE"
-            android:textColor="#FFFFFF"
             android:elevation="4dp"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:text="Chụp ảnh"
+            android:textColor="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/button_calculator"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="Calculator"
+            android:elevation="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/calculator" />
 
         <Button
             android:id="@+id/button_upload"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Tải ảnh lên"
+            android:layout_weight="1"
             android:backgroundTint="#03DAC5"
-            android:textColor="#FFFFFF"
             android:elevation="4dp"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:text="Tải ảnh lên"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/button_calculator"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="16dp"
-        android:background="@null"
-        android:src="@drawable/calculator"
-        android:contentDescription="Calculator"
-        android:elevation="8dp"
-        android:scaleType="fitCenter"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+
 
 </RelativeLayout>
