@@ -3,6 +3,8 @@ package com.example.ocr2;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editResult;
     private Button captureBtn;
-    private Bitmap img;
+    private Bitmap imgP;
     private String txt;
 
 
@@ -52,13 +54,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         imageView = findViewById(R.id.imageView);
         editTextResult = findViewById(R.id.editTextResult);
         editResult = findViewById(R.id.editResult);
-        Button buttonCapture = findViewById(R.id.button_capture);
-        Button buttonUpload = findViewById(R.id.button_upload);
-        ImageButton buttonCalculator = findViewById(R.id.button_calculator);
+        Button buttonCapture = findViewById(R.id.buttonCapture);
+        Button buttonUpload = findViewById(R.id.buttonUpload);
+        Button buttonAIsolve  = findViewById(R.id.solveWithAI);
+        Button buttonSolve  = findViewById(R.id.solve);
+        ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
 
         buttonCapture.setOnClickListener(v -> dispatchTakePictureIntent());
 //        buttonCapture.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +79,32 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+        buttonSolve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String txtP = editTextResult.getText().toString();
+                if (txtP != null && !txtP.isEmpty()) {
+                    MathSolver solver = new MathSolver();
+                    String result = solver.mathSolving(txtP);
+                    editTextResult.setText(result);
 
+                } else {
+                    Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        buttonAIsolve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imgP != null) {
+                    hoiGemini(imgP);
+                } else {
+                    Toast.makeText(MainActivity.this, "Không có ảnh đầu vào", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -95,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                img = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(imageBitmap);
                 processImage(InputImage.fromBitmap(imageBitmap, 0));
             } else if (requestCode == REQUEST_IMAGE_PICK) {
@@ -121,16 +147,54 @@ public class MainActivity extends AppCompatActivity {
         recognizer.process(image)
                 .addOnSuccessListener(result -> {
                     String resultText = processTextRecognitionResult(result);
-                    txt = processTextRecognitionResult(result);
-                    editTextResult.setText(txt);
+                    txt = resultText;
+                    imgP = image.getBitmapInternal();
+                    //editTextResult.setText(resultText);
+                    anhGemini(imgP);
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
+    }
+
+    private String processTextRecognitionResult(Text text) {
+        StringBuilder resultText = new StringBuilder();
+        for (Text.TextBlock block : text.getTextBlocks()) {
+            for (Text.Line line : block.getLines()) {
+                resultText.append(line.getText()).append("\n");
+            }
+        }
+        return resultText.toString();
+    }
+
+    private void hoiGemini(Bitmap img) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        Bitmap askImg = img;
         Content content = new Content.Builder()
-                .addText("Chỉ trả lời kết quả của bài toán trong ảnh, không cần giải thích")
+                .addText("Chỉ trả lời kết quả của bài toán trong ảnh, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
+                .addImage(img)
+                .build();
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+                @Override
+                public void onSuccess(GenerateContentResponse result) {
+                    String resultText = result.getText();
+                    editResult.setText(resultText);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            }, this.getMainExecutor());
+        }
+    }
+    private void anhGemini(Bitmap img) {
+        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
+                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+        Content content = new Content.Builder()
+                .addText("In phép toán hoặc bài toán trong ảnh trên thành text")
                 .addImage(img)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -149,40 +213,4 @@ public class MainActivity extends AppCompatActivity {
             }, this.getMainExecutor());
         }
     }
-
-    private String processTextRecognitionResult(Text text) {
-        StringBuilder resultText = new StringBuilder();
-        for (Text.TextBlock block : text.getTextBlocks()) {
-            for (Text.Line line : block.getLines()) {
-                resultText.append(line.getText()).append("\n");
-            }
-        }
-        return resultText.toString();
-    }
-
-//    private void hoiGemini(Bitmap img) {
-//        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
-//                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
-//        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-//        Bitmap askImg = img;
-//        Content content = new Content.Builder()
-//                .addText("Chỉ trả lời kết quả của bài toán trong ảnh, không cần giải thích")
-//                .addImage(img)
-//                .build();
-//        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-//                @Override
-//                public void onSuccess(GenerateContentResponse result) {
-//                    String resultText = result.getText();
-//                    editTextResult.setText(resultText);
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable t) {
-//                    t.printStackTrace();
-//                }
-//            }, this.getMainExecutor());
-//        }
-//    }
 }
