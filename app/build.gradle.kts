@@ -47,6 +47,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.rmtheis:tess-two:9.0.0")
+    implementation("net.objecthunter:exp4j:0.4.8")
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
     implementation("com.google.guava:guava:31.0.1-android")
     implementation("org.reactivestreams:reactive-streams:1.0.4")

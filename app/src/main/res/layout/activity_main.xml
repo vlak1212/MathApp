@@ -132,6 +132,16 @@
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
-
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/historyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:layout_marginTop="307dp"
+        android:layout_marginEnd="245dp"
+        android:backgroundTint="@color/colorAccent"
+        android:contentDescription="oh hello"
+        android:src="@drawable/ic_history" />
 </RelativeLayout>

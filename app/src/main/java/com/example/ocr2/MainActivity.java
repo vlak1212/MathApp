@@ -24,6 +24,7 @@ import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -60,9 +61,17 @@ public class MainActivity extends AppCompatActivity {
         Button buttonCapture = findViewById(R.id.buttonCapture);
         Button buttonUpload = findViewById(R.id.buttonUpload);
         Button buttonAIsolve  = findViewById(R.id.solveWithAI);
+        FloatingActionButton buttonHistory = findViewById(R.id.historyButton);
         Button buttonSolve  = findViewById(R.id.solve);
         ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
 
+        buttonHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, History.class);
+                startActivity(intent);
+            }
+        });
         buttonCapture.setOnClickListener(v -> dispatchTakePictureIntent());
 //        buttonCapture.setOnClickListener(new View.OnClickListener() {
 //            @Override

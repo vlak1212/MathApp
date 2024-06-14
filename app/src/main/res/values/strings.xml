@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">ocr2</string>
+    <string name="app_name">Math</string>
+    <string name="add">Thêm</string>
+
 </resources>
