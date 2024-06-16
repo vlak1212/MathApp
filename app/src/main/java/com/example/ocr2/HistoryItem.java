@@ -1,19 +1,18 @@
 package com.example.ocr2;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "history_table")
 public class HistoryItem {
-    private String problem;
-    private String result;
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
-    public HistoryItem(String problem, String result) {
-        this.problem = problem;
-        this.result = result;
-    }
+    public String equation;
+    public String solution;
 
-    public String getProblem() {
-        return problem;
-    }
-
-    public String getResult() {
-        return result;
+    public HistoryItem(String equation, String solution) {
+        this.equation = equation;
+        this.solution = solution;
     }
 }

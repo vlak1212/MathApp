@@ -50,57 +50,66 @@ public class Calculator extends AppCompatActivity {
         bdiv = findViewById(R.id.bdiv);
 
         // Setting onClick listeners for the buttons
-        b1.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "1"));
-        b2.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "2"));
-        b3.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "3"));
-        b4.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "4"));
-        b5.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "5"));
-        b6.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "6"));
-        b7.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "7"));
-        b8.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "8"));
-        b9.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "9"));
-        b0.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "0"));
-        bdot.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "."));
-        bplus.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "+"));
-        bdiv.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "/"));
-        bbrac1.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "("));
-        bbrac2.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + ")"));
+        b1.setOnClickListener(v -> appendToMain("1"));
+        b2.setOnClickListener(v -> appendToMain("2"));
+        b3.setOnClickListener(v -> appendToMain("3"));
+        b4.setOnClickListener(v -> appendToMain("4"));
+        b5.setOnClickListener(v -> appendToMain("5"));
+        b6.setOnClickListener(v -> appendToMain("6"));
+        b7.setOnClickListener(v -> appendToMain("7"));
+        b8.setOnClickListener(v -> appendToMain("8"));
+        b9.setOnClickListener(v -> appendToMain("9"));
+        b0.setOnClickListener(v -> appendToMain("0"));
+        bdot.setOnClickListener(v -> appendToMain("."));
+        bplus.setOnClickListener(v -> appendToMain("+"));
+        bdiv.setOnClickListener(v -> appendToMain("/"));
+        bbrac1.setOnClickListener(v -> appendToMain("("));
+        bbrac2.setOnClickListener(v -> appendToMain(")"));
         bpi.setOnClickListener(v -> {
-            tvMain.setText(tvMain.getText().toString() + "3.14159");
+            appendToMain("3.14159");
             tvsec.setText(bpi.getText().toString());
         });
-        bsin.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "sin"));
-        bcos.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "cos"));
-        btan.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "tan"));
-        binv.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "^(-1)"));
-        bln.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "ln"));
-        blog.setOnClickListener(v -> tvMain.setText(tvMain.getText().toString() + "log"));
+        bsin.setOnClickListener(v -> appendToMain("sin"));
+        bcos.setOnClickListener(v -> appendToMain("cos"));
+        btan.setOnClickListener(v -> appendToMain("tan"));
+        binv.setOnClickListener(v -> appendToMain("^(-1)"));
+        bln.setOnClickListener(v -> appendToMain("ln"));
+        blog.setOnClickListener(v -> appendToMain("log"));
         bminus.setOnClickListener(v -> {
             String str = tvMain.getText().toString();
             if (!str.endsWith("-")) {
-                tvMain.setText(tvMain.getText().toString() + "-");
+                appendToMain("-");
             }
         });
         bmul.setOnClickListener(v -> {
             String str = tvMain.getText().toString();
             if (!str.endsWith("*")) {
-                tvMain.setText(tvMain.getText().toString() + "*");
+                appendToMain("*");
             }
         });
         bsqrt.setOnClickListener(v -> {
             if (tvMain.getText().toString().isEmpty()) {
-                Toast.makeText(Calculator.this, "Please enter a valid number..", Toast.LENGTH_SHORT).show();
+                showToast("Please enter a valid number..");
             } else {
-                String str = tvMain.getText().toString();
-                double r = Math.sqrt(Double.parseDouble(str));
-                tvMain.setText(String.valueOf(r));
+                try {
+                    String str = tvMain.getText().toString();
+                    double r = Math.sqrt(Double.parseDouble(str));
+                    tvMain.setText(String.valueOf(r));
+                } catch (NumberFormatException e) {
+                    showToast("Invalid input");
+                }
             }
         });
         bequal.setOnClickListener(v -> {
             String str = tvMain.getText().toString();
-            double result = evaluate(str);
-            tvMain.setText(String.valueOf(result));
-            tvsec.setText(str);
+            try {
+                double result = evaluate(str);
+                tvMain.setText(String.valueOf(result));
+                tvsec.setText(str);
+            } catch (Exception e) {
+                showToast("Invalid expression");
+                tvMain.setText("");
+            }
         });
         bac.setOnClickListener(v -> {
             tvMain.setText("");
@@ -115,27 +124,48 @@ public class Calculator extends AppCompatActivity {
         });
         bsquare.setOnClickListener(v -> {
             if (tvMain.getText().toString().isEmpty()) {
-                Toast.makeText(Calculator.this, "Please enter a valid number..", Toast.LENGTH_SHORT).show();
+                showToast("Please enter a valid number..");
             } else {
-                double d = Double.parseDouble(tvMain.getText().toString());
-                double square = d * d;
-                tvMain.setText(String.valueOf(square));
-                tvsec.setText(d + "²");
+                try {
+                    double d = Double.parseDouble(tvMain.getText().toString());
+                    double square = d * d;
+                    tvMain.setText(String.valueOf(square));
+                    tvsec.setText(d + "²");
+                } catch (NumberFormatException e) {
+                    showToast("Invalid input");
+                }
             }
         });
         bfact.setOnClickListener(v -> {
             if (tvMain.getText().toString().isEmpty()) {
-                Toast.makeText(Calculator.this, "Please enter a valid number..", Toast.LENGTH_SHORT).show();
+                showToast("Please enter a valid number..");
             } else {
-                int value = Integer.parseInt(tvMain.getText().toString());
-                int fact = factorial(value);
-                tvMain.setText(String.valueOf(fact));
-                tvsec.setText(value + "!");
+                try {
+                    int value = Integer.parseInt(tvMain.getText().toString());
+                    int fact = factorial(value);
+                    tvMain.setText(String.valueOf(fact));
+                    tvsec.setText(value + "!");
+                } catch (NumberFormatException e) {
+                    showToast("Invalid input");
+                } catch (IllegalArgumentException e) {
+                    showToast(e.getMessage());
+                }
             }
         });
     }
 
+    private void appendToMain(String str) {
+        tvMain.setText(tvMain.getText().toString() + str);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(Calculator.this, message, Toast.LENGTH_SHORT).show();
+    }
+
     private int factorial(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException("Number must be non-negative");
+        }
         return (n == 1 || n == 0) ? 1 : n * factorial(n - 1);
     }
 
@@ -189,7 +219,7 @@ public class Calculator extends AppCompatActivity {
                 int startPos = this.pos;
                 if (eat('(')) { // parentheses
                     x = parseExpression();
-                    eat(')');
+                    if (!eat(')')) throw new RuntimeException("Missing closing parenthesis");
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
                     x = Double.parseDouble(str.substring(startPos, this.pos));
@@ -201,6 +231,8 @@ public class Calculator extends AppCompatActivity {
                     else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
                     else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
                     else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+                    else if (func.equals("ln")) x = Math.log(x);
+                    else if (func.equals("log")) x = Math.log10(x);
                     else throw new RuntimeException("Unknown function: " + func);
                 } else {
                     throw new RuntimeException("Unexpected: " + (char) ch);

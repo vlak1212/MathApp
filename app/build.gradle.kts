@@ -51,5 +51,8 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
     implementation("com.google.guava:guava:31.0.1-android")
     implementation("org.reactivestreams:reactive-streams:1.0.4")
+    implementation("androidx.room:room-runtime:2.5.0")
+
+    annotationProcessor("androidx.room:room-compiler:2.5.0")
 
 }

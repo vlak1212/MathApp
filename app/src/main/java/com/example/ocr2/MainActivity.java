@@ -16,9 +16,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -39,6 +41,8 @@ import java.util.concurrent.Executor;
 
 
 public class MainActivity extends AppCompatActivity {
+   // private DatabaseHelper dbHelper;
+    private HistoryDatabase db;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
@@ -64,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton buttonHistory = findViewById(R.id.historyButton);
         Button buttonSolve  = findViewById(R.id.solve);
         ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
-
+        //dbHelper = new DatabaseHelper(this);
+        db = HistoryDatabase.getInstance(this);
         buttonHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +101,10 @@ public class MainActivity extends AppCompatActivity {
                     MathSolver solver = new MathSolver();
                     String result = solver.mathSolving(txtP);
                     editTextResult.setText(result);
-
+                    //saveToDatabase(txtP, result);
+                    new Thread(() -> {
+                        db.historyDao().insert(new HistoryItem(txtP, result));
+                    }).start();
                 } else {
                     Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
                 }
@@ -108,12 +116,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (imgP != null) {
                     hoiGemini(imgP);
+                    //saveToDatabase(editTextResult.getText().toString(), editResult.getText().toString());
+                    new Thread(() -> {
+                        db.historyDao().insert(new HistoryItem(editTextResult.getText().toString(), editResult.getText().toString()));
+                    }).start();
                 } else {
                     Toast.makeText(MainActivity.this, "Không có ảnh đầu vào", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+//    private void saveToDatabase(String problem, String result) {
+//        boolean isInserted = dbHelper.addData(problem, result);
+//        if (isInserted) {
+//            Toast.makeText(MainActivity.this, "Đã lưu vào lịch sử", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(MainActivity.this, "Lưu thất bại", Toast.LENGTH_SHORT).show();
+//        }
+//    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -190,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
                     String resultText = result.getText();
                     editResult.setText(resultText);
                 }
-
                 @Override
                 public void onFailure(Throwable t) {
                     t.printStackTrace();
@@ -214,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
                     String resultText = result.getText();
                     editTextResult.setText(resultText);
                 }
-
                 @Override
                 public void onFailure(Throwable t) {
                     t.printStackTrace();
