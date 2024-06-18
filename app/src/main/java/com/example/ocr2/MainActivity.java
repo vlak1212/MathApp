@@ -26,7 +26,10 @@ import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -65,18 +68,32 @@ public class MainActivity extends AppCompatActivity {
         Button buttonCapture = findViewById(R.id.buttonCapture);
         Button buttonUpload = findViewById(R.id.buttonUpload);
         Button buttonAIsolve  = findViewById(R.id.solveWithAI);
-        FloatingActionButton buttonHistory = findViewById(R.id.historyButton);
+        //FloatingActionButton buttonHistory = findViewById(R.id.historyButton);
         Button buttonSolve  = findViewById(R.id.solve);
-        ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
+        //ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
         //dbHelper = new DatabaseHelper(this);
-        db = HistoryDatabase.getInstance(this);
-        buttonHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, History.class);
-                startActivity(intent);
-            }
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_home) {
+                return true;
+            } else if (item.getItemId() == R.id.navigation_history) {
+                startActivity(new Intent(MainActivity.this, History.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }  else if (item.getItemId() == R.id.navigation_calculator) {
+                startActivity(new Intent(MainActivity.this, Calculator.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }  else if (item.getItemId() == R.id.navigation_graph) {
+                startActivity(new Intent(MainActivity.this, GraphOptions.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else
+            return false;
         });
+        db = HistoryDatabase.getInstance(this);
         buttonCapture.setOnClickListener(v -> dispatchTakePictureIntent());
 //        buttonCapture.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -86,13 +103,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         buttonUpload.setOnClickListener(v -> dispatchPickImageIntent());
-        buttonCalculator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Calculator.class);
-                startActivity(intent);
-            }
-        });
+
         buttonSolve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

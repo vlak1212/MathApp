@@ -1,11 +1,15 @@
 package com.example.ocr2;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.List;
 
@@ -21,6 +25,27 @@ public class History extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_history);
+        bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_history) {
+                return true;
+            } else if (item.getItemId() == R.id.navigation_home) {
+                startActivity(new Intent(History.this, MainActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }  else if (item.getItemId() == R.id.navigation_calculator) {
+                startActivity(new Intent(History.this, Calculator.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }  else if (item.getItemId() == R.id.navigation_graph) {
+                startActivity(new Intent(History.this, GraphOptions.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else
+                return false;
+        });
         adapter = new HistoryAdapter();
         recyclerView.setAdapter(adapter);
 

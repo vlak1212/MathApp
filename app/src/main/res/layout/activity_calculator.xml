@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/idTVSecondary"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/black_shade_3"
         android:gravity="bottom"
         android:maxLines="1"
@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/idTVprimary"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:layout_below="@id/idTVSecondary"
         android:background="@color/black_shade_3"
         android:gravity="bottom"
@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/idTVprimary"
+        android:layout_marginBottom="65dp"
         android:background="@color/black_shade_1"
         app:cardCornerRadius="4dp"
         app:cardElevation="2dp">
@@ -546,5 +547,15 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>

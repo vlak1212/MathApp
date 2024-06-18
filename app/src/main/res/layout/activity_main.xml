@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#f5f5f5">
+    android:layout_height="wrap_content"
+    android:background="#f5f5f5"
+    >
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="396dp"
-        android:layout_height="409dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:padding="15dp"
+        android:layout_marginBottom="7dp"
         android:background="#e0e0e0"
         android:contentDescription="Image preview"
         android:elevation="4dp"
@@ -17,10 +19,11 @@
 
     <EditText
         android:id="@+id/editTextResult"
-        android:layout_width="398dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/imageView"
-        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/imgBtn"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
         android:background="@drawable/edit_text_background"
         android:elevation="4dp"
         android:gravity="top|start"
@@ -35,13 +38,29 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16sp" />
 
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/historyButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:layout_marginTop="307dp"-->
+<!--        android:layout_marginEnd="245dp"-->
+<!--        android:backgroundTint="@color/colorAccent"-->
+<!--        android:contentDescription="oh hello"-->
+<!--        android:src="@drawable/ic_history" />-->
+
     <LinearLayout
-        android:layout_width="404dp"
+        android:id="@+id/btnSolve"
+        android:layout_width="match_parent"
         android:layout_height="68dp"
         android:layout_below="@id/editTextResult"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
+        android:padding="10dp"
         android:orientation="horizontal">
+
 
         <Button
             android:id="@+id/solve"
@@ -70,11 +89,10 @@
 
     <EditText
         android:id="@+id/editResult"
-        android:layout_width="395dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/editTextResult"
-        android:layout_marginTop="85dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@+id/btnSolve"
+        android:layout_marginTop="7dp"
         android:background="@drawable/edit_text_background"
         android:elevation="4dp"
         android:gravity="top|start"
@@ -90,11 +108,13 @@
         android:textSize="16sp" />
 
     <LinearLayout
-        android:layout_width="404dp"
+        android:id="@+id/imgBtn"
+        android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:layout_below="@id/editResult"
+        android:layout_below="@id/imageView"
         android:layout_marginTop="10dp"
         android:gravity="center"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <Button
@@ -109,15 +129,15 @@
             android:text="Chụp ảnh"
             android:textColor="#FFFFFF" />
 
-        <ImageButton
-            android:id="@+id/buttonCalculator"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:contentDescription="Calculator"
-            android:elevation="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/img_1" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/buttonCalculator"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@null"-->
+<!--            android:contentDescription="Calculator"-->
+<!--            android:elevation="8dp"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:src="@drawable/ic_calculator" />-->
 
         <Button
             android:id="@+id/buttonUpload"
@@ -132,16 +152,13 @@
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/historyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:layout_marginTop="307dp"
-        android:layout_marginEnd="245dp"
-        android:backgroundTint="@color/colorAccent"
-        android:contentDescription="oh hello"
-        android:src="@drawable/ic_history" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_navigation_menu" />
 </RelativeLayout>

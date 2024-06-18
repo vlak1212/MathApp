@@ -1,10 +1,14 @@
 package com.example.ocr2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class Calculator extends AppCompatActivity {
 
@@ -16,6 +20,24 @@ public class Calculator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_calculator);
+        bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_calculator) {
+                return true;
+            } else if (item.getItemId() == R.id.navigation_history) {
+                startActivity(new Intent(Calculator.this, History.class));
+                return true;
+            }  else if (item.getItemId() == R.id.navigation_home) {
+                startActivity(new Intent(Calculator.this, MainActivity.class));
+                return true;
+            }  else if (item.getItemId() == R.id.navigation_graph) {
+                startActivity(new Intent(Calculator.this, GraphOptions.class));
+                return true;
+            } else
+                return false;
+        });
         tvsec = findViewById(R.id.idTVSecondary);
         tvMain = findViewById(R.id.idTVprimary);
         bac = findViewById(R.id.bac);
