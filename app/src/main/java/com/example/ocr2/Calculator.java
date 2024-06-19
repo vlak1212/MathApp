@@ -35,6 +35,10 @@ public class Calculator extends AppCompatActivity {
             }  else if (item.getItemId() == R.id.navigation_graph) {
                 startActivity(new Intent(Calculator.this, GraphOptions.class));
                 return true;
+            } else if (item.getItemId() == R.id.navigation_forum) {
+                startActivity(new Intent(Calculator.this, Forum.class));
+                overridePendingTransition(0, 0);
+                return true;
             } else
                 return false;
         });

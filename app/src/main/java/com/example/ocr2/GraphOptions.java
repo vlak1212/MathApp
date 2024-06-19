@@ -40,6 +40,10 @@ public class GraphOptions extends AppCompatActivity {
                 startActivity(new Intent(GraphOptions.this, MainActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
+            } else if (item.getItemId() == R.id.navigation_forum) {
+                startActivity(new Intent(GraphOptions.this, Forum.class));
+                overridePendingTransition(0, 0);
+                return true;
             } else
                 return false;
         });

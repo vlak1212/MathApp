@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
-        //dbHelper = new DatabaseHelper(this);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_home) {
                 return true;
@@ -88,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }  else if (item.getItemId() == R.id.navigation_graph) {
                 startActivity(new Intent(MainActivity.this, GraphOptions.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_forum) {
+                startActivity(new Intent(MainActivity.this, Forum.class));
                 overridePendingTransition(0, 0);
                 return true;
             } else

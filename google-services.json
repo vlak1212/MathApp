@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "152443274806",
+    "project_id": "forumdatabase-1dc3d",
+    "storage_bucket": "forumdatabase-1dc3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152443274806:android:da17a65a09b5645a2e7a97",
+        "android_client_info": {
+          "package_name": "com.example.forum5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdD-5X5cM2yl6AuTrk6WG5RQyC8FK7C-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

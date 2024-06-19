@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".PostDetails">
+
+    <TextView
+        android:id="@+id/textViewPostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewPostEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/textViewPostContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/imageViewPost"
+        android:layout_width="379dp"
+        android:layout_height="163dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop" />
+
+    <EditText
+        android:id="@+id/editTextCommentEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/editTextCommentContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Comment"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/btnSelectCommentImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Image"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/btnPostComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Post Comment" />
+
+    <ImageView
+        android:id="@+id/imageViewCommentSelected"
+        android:layout_width="387dp"
+        android:layout_height="133dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewComments"
+        android:layout_width="387dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:padding="16dp" />
+
+</LinearLayout>
