@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,7 +20,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class PlotGraph extends AppCompatActivity {
 
-    private LinearLayout inputContainer;
+    private LinearLayout inputBox;
     private GraphView graphView;
     private int equationType;
     private TextView equationLabel;
@@ -31,14 +30,14 @@ public class PlotGraph extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
-        inputContainer = findViewById(R.id.inputContainer);
+        inputBox = findViewById(R.id.Input);
         graphView = findViewById(R.id.graphView);
-        equationLabel = findViewById(R.id.equationLabel);
-        Button btnPlot = findViewById(R.id.btnPlot);
+        equationLabel = findViewById(R.id.Rec);
+        Button btnPlot = findViewById(R.id.buttonPlot);
 
-        equationType = getIntent().getIntExtra("equationType", 1);
+        equationType = getIntent().getIntExtra("equationType", equationType);
         setEquationLabel(equationType);
-        createInputFields(equationType);
+        inputFields(equationType);
 
         btnPlot.setOnClickListener(v -> plotGraph());
     }
@@ -64,47 +63,55 @@ public class PlotGraph extends AppCompatActivity {
             case 6:
                 label = "Đồ thị hàm số: y = cos(x)";
                 break;
+            case 7:
+                label = "Đồ thị hàm số: y = log(x)";
+                break;
         }
         equationLabel.setText(Html.fromHtml(label));
     }
 
-    private void createInputFields(int type) {
-        inputContainer.removeAllViews();
+    private void inputFields(int type) {
+        inputBox.removeAllViews();
         if (type >= 1 && type <= 4) {
             for (char coeff = 'a'; coeff <= 'a' + type; coeff++) {
-                addInputField(String.valueOf(coeff));
+                addInput("Hệ số " + coeff, "Nhập hệ số " + coeff);
             }
-        } else if (type == 5 || type == 6) {
-            addInputField("x");
+        } else if (type == 7) {
+            addInput("Nhập giá trị x", "Nhập x");
         }
     }
 
-    private void addInputField(String coefficient) {
+
+    private void addInput(String labelText, String hint) {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setPadding(0, 16, 0, 16);
 
         TextView label = new TextView(this);
-        label.setText("Hệ số " + coefficient + ": ");
+        label.setText(labelText + ": ");
         label.setTextSize(16);
 
         EditText editText = new EditText(this);
-        editText.setHint("Nhập hệ số " + coefficient);
+        editText.setHint(hint);
         editText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)}); // Optional: Limit input length
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
 
         layout.addView(label);
         layout.addView(editText);
 
-        inputContainer.addView(layout);
+        inputBox.addView(layout);
     }
+
 
     private void plotGraph() {
         double[] coefficients = new double[equationType + 1];
+        double xStart = -20;
+        double xEnd = 20;
+
         if (equationType >= 1 && equationType <= 4) {
-            for (int i = 0; i < inputContainer.getChildCount(); i++) {
-                LinearLayout layout = (LinearLayout) inputContainer.getChildAt(i);
+            for (int i = 0; i < inputBox.getChildCount(); i++) {
+                LinearLayout layout = (LinearLayout) inputBox.getChildAt(i);
                 EditText editText = (EditText) layout.getChildAt(1);
                 String input = editText.getText().toString();
                 if (input.isEmpty()) {
@@ -118,33 +125,42 @@ public class PlotGraph extends AppCompatActivity {
                     return;
                 }
             }
-        } else if (equationType == 5 || equationType == 6) {
-            LinearLayout layout = (LinearLayout) inputContainer.getChildAt(0);
-            EditText editText = (EditText) layout.getChildAt(1);
-            String input = editText.getText().toString();
-            if (input.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập giá trị x", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try {
-                coefficients[0] = Double.parseDouble(input);
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Vui lòng nhập giá trị số hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
+        } else if (equationType == 5 || equationType == 6 || equationType == 7) {
+            for (int i = 0; i < inputBox.getChildCount(); i++) {
+                LinearLayout layout = (LinearLayout) inputBox.getChildAt(i);
+                EditText editText = (EditText) layout.getChildAt(1);
+                String input = editText.getText().toString();
+                if (input.isEmpty()) {
+                    Toast.makeText(this, "Vui lòng nhập đầy đủ giá trị x", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    if (i == 0) {
+                        xStart = Double.parseDouble(input);
+                    } else {
+                        xEnd = Double.parseDouble(input);
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Vui lòng nhập giá trị số hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         }
 
         graphView.removeAllSeries();
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-        for (double x = -20; x <= 20; x += 0.1) {
+        for (double x = xStart; x <= xEnd; x += 0.1) {
             double y = calculateY(equationType, coefficients, x);
+            if (equationType == 7 && x <= 0) {
+                continue;
+            }
             series.appendData(new DataPoint(x, y), true, 400);
         }
         graphView.addSeries(series);
 
         graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setMinX(-10);
-        graphView.getViewport().setMaxX(10);
+        graphView.getViewport().setMinX(xStart);
+        graphView.getViewport().setMaxX(xEnd);
         graphView.getViewport().setYAxisBoundsManual(true);
         graphView.getViewport().setMinY(-10);
         graphView.getViewport().setMaxY(10);
@@ -153,33 +169,44 @@ public class PlotGraph extends AppCompatActivity {
         graphView.getGridLabelRenderer().setVerticalAxisTitle("Y");
         graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter());
 
-
         graphView.getViewport().setScalable(true);
         graphView.getViewport().setScalableY(true);
 
         graphView.getGridLabelRenderer().setHorizontalAxisTitle("X");
-        graphView.getGridLabelRenderer().setNumHorizontalLabels(11);
-
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(21);
 
         graphView.getGridLabelRenderer().setVerticalAxisTitle("Y");
-        graphView.getGridLabelRenderer().setNumVerticalLabels(11);
+        graphView.getGridLabelRenderer().setNumVerticalLabels(21);
     }
+
+
 
     private double calculateY(int type, double[] coefficients, double x) {
         double y = 0;
-        if (type == 1) {
-            y = coefficients[0] * x + coefficients[1];
-        } else if (type == 2) {
-            y = coefficients[0] * x * x + coefficients[1] * x + coefficients[2];
-        } else if (type == 3) {
-            y = coefficients[0] * x * x * x + coefficients[1] * x * x + coefficients[2] * x + coefficients[3];
-        } else if (type == 4) {
-            y = coefficients[0] * x * x * x * x + coefficients[1] * x * x * x + coefficients[2] * x * x + coefficients[3] * x + coefficients[4];
-        } else if (type == 5) {
-            y = Math.sin(Math.toRadians(x));
-        } else if (type == 6) {
-            y = Math.cos(Math.toRadians(x));
+        switch (type) {
+            case 1:
+                y = coefficients[0] * x + coefficients[1];
+                break;
+            case 2:
+                y = coefficients[0] * x * x + coefficients[1] * x + coefficients[2];
+                break;
+            case 3:
+                y = coefficients[0] * x * x * x + coefficients[1] * x * x + coefficients[2] * x + coefficients[3];
+                break;
+            case 4:
+                y = coefficients[0] * x * x * x * x + coefficients[1] * x * x * x + coefficients[2] * x * x + coefficients[3] * x + coefficients[4];
+                break;
+            case 5:
+                y = Math.sin(Math.toRadians(x));
+                break;
+            case 6:
+                y = Math.cos(Math.toRadians(x));
+                break;
+            case 7:
+                y = Math.log(x);
+                break;
         }
         return y;
     }
+
 }

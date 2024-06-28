@@ -17,7 +17,6 @@ import java.io.IOException;
 public class CreatePost extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-
     private EditText editTextEmail, editTextTitle, editTextContent;
     private ImageView imageViewSelected;
     private Bitmap selectedImageBitmap;
@@ -31,22 +30,22 @@ public class CreatePost extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
-        editTextEmail = findViewById(R.id.editTextEmail);
-        editTextTitle = findViewById(R.id.editTextTitle);
-        editTextContent = findViewById(R.id.editTextContent);
-        imageViewSelected = findViewById(R.id.imageViewSelected);
+        editTextEmail = findViewById(R.id.editEmail);
+        editTextTitle = findViewById(R.id.editTitle);
+        editTextContent = findViewById(R.id.editContent);
+        imageViewSelected = findViewById(R.id.imageSelected);
         Button btnSelectImage = findViewById(R.id.btnSelectImage);
         Button btnPost = findViewById(R.id.btnPost);
 
-        btnSelectImage.setOnClickListener(v -> openImagePicker());
+        btnSelectImage.setOnClickListener(v -> imagePicker());
         btnPost.setOnClickListener(v -> post());
     }
 
-    private void openImagePicker() {
+    private void imagePicker() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), PICK_IMAGE_REQUEST);
     }
 
     @Override

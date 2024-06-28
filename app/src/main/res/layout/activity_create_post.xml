@@ -8,20 +8,20 @@
     tools:context=".CreatePost">
 
     <EditText
-        android:id="@+id/editTextEmail"
+        android:id="@+id/editEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email" />
 
     <EditText
-        android:id="@+id/editTextTitle"
+        android:id="@+id/editTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Title"
         android:layout_marginTop="8dp" />
 
     <EditText
-        android:id="@+id/editTextContent"
+        android:id="@+id/editContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Content"
@@ -36,7 +36,7 @@
         android:layout_marginTop="8dp" />
 
     <ImageView
-        android:id="@+id/imageViewSelected"
+        android:id="@+id/imageSelected"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="8dp"

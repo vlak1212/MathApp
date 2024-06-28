@@ -40,17 +40,17 @@ public class PostDetails extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
-        textViewPostTitle = findViewById(R.id.textViewPostTitle);
-        textViewPostEmail = findViewById(R.id.textViewPostEmail);
-        textViewPostContent = findViewById(R.id.textViewPostContent);
+        textViewPostTitle = findViewById(R.id.PostTitle);
+        textViewPostEmail = findViewById(R.id.PostEmail);
+        textViewPostContent = findViewById(R.id.PostContent);
         imageViewPost = findViewById(R.id.imageViewPost);
 
-        editTextCommentEmail = findViewById(R.id.editTextCommentEmail);
-        editTextCommentContent = findViewById(R.id.editTextCommentContent);
-        imageViewCommentSelected = findViewById(R.id.imageViewCommentSelected);
-        recyclerViewComments = findViewById(R.id.recyclerViewComments);
-        Button btnSelectCommentImage = findViewById(R.id.btnSelectCommentImage);
-        Button btnPostComment = findViewById(R.id.btnPostComment);
+        editTextCommentEmail = findViewById(R.id.CommentEmail);
+        editTextCommentContent = findViewById(R.id.CommentContent);
+        imageViewCommentSelected = findViewById(R.id.imageCommentSelected);
+        recyclerViewComments = findViewById(R.id.BG2);
+        Button btnSelectCommentImage = findViewById(R.id.buttonCommentImage);
+        Button btnPostComment = findViewById(R.id.buttonPostComment);
 
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
 
@@ -59,7 +59,7 @@ public class PostDetails extends AppCompatActivity {
         loadPostDetails(postId);
         loadComments(postId);
 
-        btnSelectCommentImage.setOnClickListener(v -> openImagePicker());
+        btnSelectCommentImage.setOnClickListener(v -> imagePicker());
         btnPostComment.setOnClickListener(v -> postComment());
     }
 
@@ -83,11 +83,11 @@ public class PostDetails extends AppCompatActivity {
         recyclerViewComments.setAdapter(commentAdapter);
     }
 
-    private void openImagePicker() {
+    private void imagePicker() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), PICK_IMAGE_REQUEST);
     }
 
     @Override

@@ -16,12 +16,13 @@ public class GraphOptions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_options);
 
-        Button btnLinear = findViewById(R.id.btnLinear);
-        Button btnQuadratic = findViewById(R.id.btnQuadratic);
-        Button btnCubic = findViewById(R.id.btnCubic);
-        Button btnQuartic = findViewById(R.id.btnQuartic);
-        Button btnSin = findViewById(R.id.btnSin);
-        Button btnCos = findViewById(R.id.btnCos);
+        Button btn1 = findViewById(R.id.buttonB1);
+        Button btn2 = findViewById(R.id.buttonB2);
+        Button btn3 = findViewById(R.id.buttonB3);
+        Button btn4 = findViewById(R.id.buttonB4);
+        Button btnLog = findViewById(R.id.buttonLogg);
+        Button btnSin = findViewById(R.id.buttonSinn);
+        Button btnCos = findViewById(R.id.buttonCoss);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_graph);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
@@ -47,15 +48,16 @@ public class GraphOptions extends AppCompatActivity {
             } else
                 return false;
         });
-        btnLinear.setOnClickListener(v -> startPlotGraphActivity(1));
-        btnQuadratic.setOnClickListener(v -> startPlotGraphActivity(2));
-        btnCubic.setOnClickListener(v -> startPlotGraphActivity(3));
-        btnQuartic.setOnClickListener(v -> startPlotGraphActivity(4));
-        btnSin.setOnClickListener(v -> startPlotGraphActivity(5));
-        btnCos.setOnClickListener(v -> startPlotGraphActivity(6));
+        btn1.setOnClickListener(v -> plotingGraph(1));
+        btn2.setOnClickListener(v -> plotingGraph(2));
+        btn3.setOnClickListener(v -> plotingGraph(3));
+        btn4.setOnClickListener(v -> plotingGraph(4));
+        btnSin.setOnClickListener(v -> plotingGraph(5));
+        btnCos.setOnClickListener(v -> plotingGraph(6));
+        btnLog.setOnClickListener(v -> plotingGraph(7));
     }
 
-    private void startPlotGraphActivity(int equationType) {
+    private void plotingGraph(int equationType) {
         Intent intent = new Intent(this, PlotGraph.class);
         intent.putExtra("equationType", equationType);
         startActivity(intent);

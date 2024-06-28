@@ -8,21 +8,21 @@
     tools:context=".PostDetails">
 
     <TextView
-        android:id="@+id/textViewPostTitle"
+        android:id="@+id/PostTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textViewPostEmail"
+        android:id="@+id/PostEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="italic"
         android:layout_marginTop="4dp" />
 
     <TextView
-        android:id="@+id/textViewPostContent"
+        android:id="@+id/PostContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp" />
@@ -35,42 +35,42 @@
         android:scaleType="centerCrop" />
 
     <EditText
-        android:id="@+id/editTextCommentEmail"
+        android:id="@+id/CommentEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
         android:layout_marginTop="16dp" />
 
     <EditText
-        android:id="@+id/editTextCommentContent"
+        android:id="@+id/CommentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Comment"
         android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/btnSelectCommentImage"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonCommentImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Image"
         android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/btnPostComment"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonPostComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Post Comment" />
 
     <ImageView
-        android:id="@+id/imageViewCommentSelected"
+        android:id="@+id/imageCommentSelected"
         android:layout_width="387dp"
         android:layout_height="133dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewComments"
+        android:id="@+id/BG2"
         android:layout_width="387dp"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"

@@ -31,8 +31,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        Post post = postList.get(position);
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int pos) {
+        Post post = postList.get(pos);
         holder.textViewPostTitle.setText(post.getTitle());
         holder.textViewPostEmail.setText(post.getEmail());
         holder.textViewPostContent.setText(post.getContent());
@@ -62,9 +62,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewPostTitle = itemView.findViewById(R.id.textViewPostTitle);
-            textViewPostEmail = itemView.findViewById(R.id.textViewPostEmail);
-            textViewPostContent = itemView.findViewById(R.id.textViewPostContent);
+            textViewPostTitle = itemView.findViewById(R.id.PostTitle);
+            textViewPostEmail = itemView.findViewById(R.id.PostEmail);
+            textViewPostContent = itemView.findViewById(R.id.PostContent);
             imageViewPost = itemView.findViewById(R.id.imageViewPost);
         }
     }

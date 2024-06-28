@@ -13,12 +13,12 @@
         android:padding="15dp"
         android:layout_marginBottom="7dp"
         android:background="#e0e0e0"
-        android:contentDescription="Image preview"
+        android:contentDescription="Xem truoc anh"
         android:elevation="4dp"
         android:scaleType="fitCenter" />
 
     <EditText
-        android:id="@+id/editTextResult"
+        android:id="@+id/Problems"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_below="@id/imgBtn"
@@ -52,10 +52,10 @@
 <!--        android:src="@drawable/ic_history" />-->
 
     <LinearLayout
-        android:id="@+id/btnSolve"
+        android:id="@+id/buttonSolve"
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:layout_below="@id/editTextResult"
+        android:layout_below="@id/Problems"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:padding="10dp"
@@ -88,10 +88,10 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/editResult"
+        android:id="@+id/Result"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_below="@+id/btnSolve"
+        android:layout_below="@+id/buttonSolve"
         android:layout_marginTop="7dp"
         android:background="@drawable/edit_text_background"
         android:elevation="4dp"

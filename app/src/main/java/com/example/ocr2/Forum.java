@@ -30,7 +30,7 @@ public class Forum extends AppCompatActivity {
         recyclerViewPosts = findViewById(R.id.recyclerViewPosts);
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        Button btnCreatePost = findViewById(R.id.btnCreatePost);
+        Button btnCreatePost = findViewById(R.id.buttonCreatePost);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_forum);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);

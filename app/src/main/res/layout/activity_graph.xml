@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/equationLabel"
+        android:id="@+id/Rec"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Phương trình"
@@ -17,13 +17,13 @@
         android:paddingBottom="16dp" />
 
     <LinearLayout
-        android:id="@+id/inputContainer"
+        android:id="@+id/Input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-    <Button
-        android:id="@+id/btnPlot"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonPlot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Vẽ đồ thị" />

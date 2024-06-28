@@ -8,7 +8,7 @@
     android:layout_marginBottom="8dp">
 
     <TextView
-        android:id="@+id/textViewCommentEmail"
+        android:id="@+id/textCommentEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -16,13 +16,13 @@
         android:layout_marginBottom="4dp" />
 
     <TextView
-        android:id="@+id/textViewCommentContent"
+        android:id="@+id/textCommentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp" />
 
     <ImageView
-        android:id="@+id/imageViewComment"
+        android:id="@+id/imageComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

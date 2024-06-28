@@ -76,8 +76,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            textEquation = itemView.findViewById(R.id.text_equation);
-            textSolution = itemView.findViewById(R.id.text_solution);
+            textEquation = itemView.findViewById(R.id.HProblems);
+            textSolution = itemView.findViewById(R.id.HSolution);
         }
     }
 }

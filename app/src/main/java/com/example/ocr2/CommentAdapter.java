@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.commentHolder> {
 
     private Context context;
     private List<Comment> commentList;
@@ -24,13 +24,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public commentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
-        return new CommentViewHolder(view);
+        return new commentHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull commentHolder holder, int position) {
         Comment comment = commentList.get(position);
         holder.textViewCommentEmail.setText(comment.getEmail());
         holder.textViewCommentContent.setText(comment.getContent());
@@ -48,15 +48,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return commentList.size();
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
+    public static class commentHolder extends RecyclerView.ViewHolder {
         TextView textViewCommentEmail, textViewCommentContent;
         ImageView imageViewComment;
 
-        public CommentViewHolder(@NonNull View itemView) {
+        public commentHolder(@NonNull View itemView) {
             super(itemView);
-            textViewCommentEmail = itemView.findViewById(R.id.textViewCommentEmail);
-            textViewCommentContent = itemView.findViewById(R.id.textViewCommentContent);
-            imageViewComment = itemView.findViewById(R.id.imageViewComment);
+            textViewCommentEmail = itemView.findViewById(R.id.textCommentEmail);
+            textViewCommentContent = itemView.findViewById(R.id.textCommentContent);
+            imageViewComment = itemView.findViewById(R.id.imageComment);
         }
     }
 }

@@ -16,7 +16,6 @@ public class Comment {
         this.image = image;
     }
 
-    // Getter và Setter cho các trường
     public int getId() {
         return id;
     }
