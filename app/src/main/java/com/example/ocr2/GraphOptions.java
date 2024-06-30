@@ -21,8 +21,8 @@ public class GraphOptions extends AppCompatActivity {
         Button btn3 = findViewById(R.id.buttonB3);
         Button btn4 = findViewById(R.id.buttonB4);
         Button btnLog = findViewById(R.id.buttonLogg);
-        Button btnSin = findViewById(R.id.buttonSinn);
-        Button btnCos = findViewById(R.id.buttonCoss);
+//        Button btnSin = findViewById(R.id.buttonSinn);
+//        Button btnCos = findViewById(R.id.buttonCoss);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_graph);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
@@ -52,8 +52,8 @@ public class GraphOptions extends AppCompatActivity {
         btn2.setOnClickListener(v -> plotingGraph(2));
         btn3.setOnClickListener(v -> plotingGraph(3));
         btn4.setOnClickListener(v -> plotingGraph(4));
-        btnSin.setOnClickListener(v -> plotingGraph(5));
-        btnCos.setOnClickListener(v -> plotingGraph(6));
+//        btnSin.setOnClickListener(v -> plotingGraph(5));
+//        btnCos.setOnClickListener(v -> plotingGraph(6));
         btnLog.setOnClickListener(v -> plotingGraph(7));
     }
 

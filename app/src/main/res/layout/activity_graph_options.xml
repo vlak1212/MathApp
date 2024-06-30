@@ -61,39 +61,12 @@
             android:text="Đồ thị bậc 4"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/buttonSinn"
+            app:layout_constraintBottom_toTopOf="@+id/buttonLogg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonB3" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonSinn"
-            android:layout_width="300dp"
-            android:layout_height="80dp"
-            android:background="@drawable/custom_button"
-            android:text="Đồ thị sin"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/buttonCoss"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.14"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonB4" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonCoss"
-            android:layout_width="300dp"
-            android:layout_height="80dp"
-            android:background="@drawable/custom_button"
-            android:text="Đồ thị cos"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/buttonLogg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.14"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSinn" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonLogg"
@@ -107,7 +80,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.14"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonCoss" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonB4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
