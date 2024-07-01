@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Button buttonUpload = findViewById(R.id.buttonUpload);
         Button buttonAIsolve  = findViewById(R.id.solveWithAI);
         //FloatingActionButton buttonHistory = findViewById(R.id.historyButton);
-        Button buttonSolve  = findViewById(R.id.solve);
+        //Button buttonSolve  = findViewById(R.id.solve);
         //ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
@@ -97,23 +97,23 @@ public class MainActivity extends AppCompatActivity {
 //        });
         buttonUpload.setOnClickListener(v -> dispatchPickImageIntent());
 
-        buttonSolve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String txtP = editTextResult.getText().toString();
-                if (txtP != null && !txtP.isEmpty()) {
-                    MathSolver solver = new MathSolver();
-                    String result = solver.mathSolving(txtP);
-                    editTextResult.setText(result);
-                    //saveToDatabase(txtP, result);
-                    new Thread(() -> {
-                        db.historyDao().insert(new HistoryItem(txtP, result));
-                    }).start();
-                } else {
-                    Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        buttonSolve.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String txtP = editTextResult.getText().toString();
+//                if (txtP != null && !txtP.isEmpty()) {
+//                    MathSolver solver = new MathSolver();
+//                    String result = solver.mathSolving(txtP);
+//                    editTextResult.setText(result);
+//                    //saveToDatabase(txtP, result);
+//                    new Thread(() -> {
+//                        db.historyDao().insert(new HistoryItem(txtP, result));
+//                    }).start();
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         buttonAIsolve.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 if (imgP != null) {
                     hoiGemini(imgP);
                     //saveToDatabase(editTextResult.getText().toString(), editResult.getText().toString());
-                    new Thread(() -> {
-                        db.historyDao().insert(new HistoryItem(editTextResult.getText().toString(), editResult.getText().toString()));
-                    }).start();
+//                    new Thread(() -> {
+//                        db.historyDao().insert(new HistoryItem(editTextResult.getText().toString(), editResult.getText().toString()));
+//                    }).start();
                 } else {
                     Toast.makeText(MainActivity.this, "Không có ảnh đầu vào", Toast.LENGTH_SHORT).show();
                 }
@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onSuccess(GenerateContentResponse result) {
                     String resultText = result.getText();
                     editResult.setText(resultText);
+                    saveToDatabase(txt, resultText);
                 }
                 @Override
                 public void onFailure(Throwable t) {
@@ -243,5 +244,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, this.getMainExecutor());
         }
+    }
+    private void saveToDatabase(String problem, String result) {
+        new Thread(() -> {
+            db.historyDao().insert(new HistoryItem(problem, result));
+        }).start();
     }
 }
