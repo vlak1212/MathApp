@@ -38,7 +38,7 @@ public class PostDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_details);
 
-        db = new DatabaseHelper(this);
+       db = new DatabaseHelper(this);
 
         textViewPostTitle = findViewById(R.id.PostTitle);
         textViewPostEmail = findViewById(R.id.PostEmail);

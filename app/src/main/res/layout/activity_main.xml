@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#f5f5f5"
-    >
+    android:layout_height="match_parent"
+    android:background="#CCCCCC">
 
     <ImageView
         android:id="@+id/imageView"
@@ -20,7 +19,7 @@
     <EditText
         android:id="@+id/Problems"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="131dp"
         android:layout_below="@id/imgBtn"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
@@ -38,41 +37,15 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16sp" />
 
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/historyButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:layout_marginTop="307dp"-->
-<!--        android:layout_marginEnd="245dp"-->
-<!--        android:backgroundTint="@color/colorAccent"-->
-<!--        android:contentDescription="oh hello"-->
-<!--        android:src="@drawable/ic_history" />-->
-
     <LinearLayout
         android:id="@+id/buttonSolve"
         android:layout_width="match_parent"
         android:layout_height="68dp"
         android:layout_below="@id/Problems"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="-12dp"
         android:gravity="center"
-        android:padding="10dp"
-        android:orientation="horizontal">
-
-
-<!--        <Button-->
-<!--            android:id="@+id/solve"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:backgroundTint="#FFA500"-->
-<!--            android:elevation="4dp"-->
-<!--            android:padding="12dp"-->
-<!--            android:text="Giải"-->
-<!--            android:textColor="#FFFFFF" />-->
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <Button
             android:id="@+id/solveWithAI"
@@ -91,9 +64,9 @@
     <EditText
         android:id="@+id/Result"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="137dp"
         android:layout_below="@+id/buttonSolve"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="-9dp"
         android:background="@drawable/edit_text_background"
         android:elevation="4dp"
         android:gravity="top|start"
@@ -124,21 +97,20 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:backgroundTint="#6200EE"
             android:elevation="4dp"
             android:padding="12dp"
             android:text="Chụp ảnh"
             android:textColor="#FFFFFF" />
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/buttonCalculator"-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@null"-->
-<!--            android:contentDescription="Calculator"-->
-<!--            android:elevation="8dp"-->
-<!--            android:scaleType="fitCenter"-->
-<!--            android:src="@drawable/ic_calculator" />-->
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/buttonCalculator"-->
+        <!--            android:layout_width="80dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@null"-->
+        <!--            android:contentDescription="Calculator"-->
+        <!--            android:elevation="8dp"-->
+        <!--            android:scaleType="fitCenter"-->
+        <!--            android:src="@drawable/ic_calculator" />-->
 
         <Button
             android:id="@+id/buttonUpload"

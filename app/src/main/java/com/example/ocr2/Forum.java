@@ -24,7 +24,6 @@ public class Forum extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
-
         db = new DatabaseHelper(this);
 
         recyclerViewPosts = findViewById(R.id.recyclerViewPosts);
