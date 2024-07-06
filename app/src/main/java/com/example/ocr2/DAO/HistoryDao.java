@@ -1,9 +1,11 @@
-package com.example.ocr2;
+package com.example.ocr2.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+
+import com.example.ocr2.HistoryItem;
 
 import java.util.List;
 

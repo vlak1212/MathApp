@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.ocr2.Adapter.PostAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -48,8 +49,8 @@ public class Forum extends AppCompatActivity {
                 startActivity(new Intent(Forum.this, GraphOptions.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (item.getItemId() == R.id.navigation_forum) {
-                startActivity(new Intent(Forum.this, Forum.class));
+            } else if (item.getItemId() == R.id.navigation_history) {
+                startActivity(new Intent(Forum.this, History.class));
                 overridePendingTransition(0, 0);
                 return true;
             } else

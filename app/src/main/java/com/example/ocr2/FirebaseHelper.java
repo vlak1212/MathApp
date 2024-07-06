@@ -30,7 +30,6 @@ public class FirebaseHelper extends AppCompatActivity {
     public static void addPost(Post post) {
         String imageBase64 = Base64.encodeToString(post.getImage(), Base64.DEFAULT);
         Map<String, Object> postMap = new HashMap<>();
-        postMap.put("id", post.getId());
         postMap.put("email", post.getEmail());
         postMap.put("title", post.getTitle());
         postMap.put("content", post.getContent());
@@ -52,17 +51,17 @@ public class FirebaseHelper extends AppCompatActivity {
                 });
     }
 
-    public static List<Post> getAllPosts() {
-        List<Post> postList = new ArrayList<>();
+    public static void getAllPosts(final PostCallback callback) {
         db.collection(POSTS_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Post> postList = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Post post = new Post();
-                                post.setId(document.getLong("id").intValue());
+                                post.setId(Integer.parseInt(document.getId()));
                                 post.setEmail(document.getString("email"));
                                 post.setTitle(document.getString("title"));
                                 post.setContent(document.getString("content"));
@@ -72,47 +71,44 @@ public class FirebaseHelper extends AppCompatActivity {
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        callback.onCallback(postList);
                     }
                 });
-        return postList;
     }
 
-    public static Post getPost(int id) {
-        final Post[] post = {null};
+    public static void getPost(String id, final PostCallback callback) {
         db.collection(POSTS_COLLECTION)
-                .whereEqualTo("id", id)
+                .document(id)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                            DocumentSnapshot document = task.getResult().getDocuments().get(0);
-                            post[0] = new Post();
-                            post[0].setId(document.getLong("id").intValue());
-                            post[0].setEmail(document.getString("email"));
-                            post[0].setTitle(document.getString("title"));
-                            post[0].setContent(document.getString("content"));
-                            post[0].setImage(Base64.decode(document.getString("image"), Base64.DEFAULT));
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        Post post = null;
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            DocumentSnapshot document = task.getResult();
+                            post = new Post();
+                            post.setId(Integer.parseInt(document.getId()));
+                            post.setEmail(document.getString("email"));
+                            post.setTitle(document.getString("title"));
+                            post.setContent(document.getString("content"));
+                            post.setImage(Base64.decode(document.getString("image"), Base64.DEFAULT));
                         } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w(TAG, "Error getting document.", task.getException());
                         }
+                        callback.onCallback((List<Post>) post);
                     }
                 });
-        return post[0];
     }
 
     public static void addComment(Comment comment) {
         String imageBase64 = Base64.encodeToString(comment.getImage(), Base64.DEFAULT);
         Map<String, Object> commentMap = new HashMap<>();
-        commentMap.put("id", comment.getId());
         commentMap.put("postId", comment.getPostId());
         commentMap.put("email", comment.getEmail());
         commentMap.put("content", comment.getContent());
         commentMap.put("image", imageBase64);
 
-        db.collection(POSTS_COLLECTION)
-                .document(String.valueOf(comment.getPostId())) // Assuming postId is unique and used as document ID
-                .collection(COMMENTS_COLLECTION)
+        db.collection(COMMENTS_COLLECTION)
                 .add(commentMap)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -128,20 +124,18 @@ public class FirebaseHelper extends AppCompatActivity {
                 });
     }
 
-    public static List<Comment> getAllCommentsForPost(int postId) {
-        List<Comment> commentList = new ArrayList<>();
-        db.collection(POSTS_COLLECTION)
-                .document(String.valueOf(postId))
-                .collection(COMMENTS_COLLECTION)
+    public static void getAllCommentsForPost(int postId, final CommentCallback callback) {
+        db.collection(COMMENTS_COLLECTION)
                 .whereEqualTo("postId", postId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Comment> commentList = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Comment comment = new Comment();
-                                comment.setId(document.getLong("id").intValue());
+                                comment.setId(Integer.parseInt(document.getId()));
                                 comment.setPostId(document.getLong("postId").intValue());
                                 comment.setEmail(document.getString("email"));
                                 comment.setContent(document.getString("content"));
@@ -151,8 +145,16 @@ public class FirebaseHelper extends AppCompatActivity {
                         } else {
                             Log.w(TAG, "Error getting comments.", task.getException());
                         }
+                        callback.onCallback(commentList);
                     }
                 });
-        return commentList;
+    }
+
+    public interface PostCallback {
+        void onCallback(List<Post> postList);
+    }
+
+    public interface CommentCallback {
+        void onCallback(List<Comment> commentList);
     }
 }

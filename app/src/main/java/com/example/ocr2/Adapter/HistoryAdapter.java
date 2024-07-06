@@ -1,4 +1,4 @@
-package com.example.ocr2;
+package com.example.ocr2.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +7,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ocr2.HistoryItem;
+import com.example.ocr2.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
-    List<HistoryItem> historyList = new ArrayList<>();
+    public List<HistoryItem> historyList = new ArrayList<>();
     private delListener delListener;
 
     @NonNull
