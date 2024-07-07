@@ -1,7 +1,7 @@
 package com.example.ocr2;
 
 public class Post {
-    private int id;
+    private String id;
     private String title;
     private String content;
     private String email;
@@ -16,7 +16,7 @@ public class Post {
         this.image = image;
     }
 
-    public Post(int id, String title, String content, String email, byte[] image) {
+    public Post(String id, String title, String content, String email, byte[] image) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -24,11 +24,11 @@ public class Post {
         this.image = image;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

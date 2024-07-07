@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Post post = new Post();
-                post.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_POST_ID)));
+                post.setId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POST_ID)));
                 post.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POST_EMAIL)));
                 post.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POST_TITLE)));
                 post.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POST_CONTENT)));
@@ -103,7 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         Post post = new Post(
-                cursor.getInt(0),
+                cursor.getString(0),
                 cursor.getString(1),
                 cursor.getString(2),
                 cursor.getString(3),
@@ -134,8 +134,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Comment comment = new Comment();
-                comment.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_ID)));
-                comment.setPostId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_POST_ID)));
+                comment.setId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_ID)));
+                comment.setPostId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_POST_ID)));
                 comment.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_EMAIL)));
                 comment.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_CONTENT)));
                 comment.setImage(cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_COMMENT_IMAGE)));

@@ -19,13 +19,11 @@ public class Forum extends AppCompatActivity {
 
     private RecyclerView recyclerViewPosts;
     private PostAdapter postAdapter;
-    private DatabaseHelper db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
-        db = new DatabaseHelper(this);
 
         recyclerViewPosts = findViewById(R.id.recyclerViewPosts);
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
@@ -41,11 +39,11 @@ public class Forum extends AppCompatActivity {
                 startActivity(new Intent(Forum.this, MainActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            }  else if (item.getItemId() == R.id.navigation_calculator) {
+            } else if (item.getItemId() == R.id.navigation_calculator) {
                 startActivity(new Intent(Forum.this, Calculator.class));
                 overridePendingTransition(0, 0);
                 return true;
-            }  else if (item.getItemId() == R.id.navigation_graph) {
+            } else if (item.getItemId() == R.id.navigation_graph) {
                 startActivity(new Intent(Forum.this, GraphOptions.class));
                 overridePendingTransition(0, 0);
                 return true;
@@ -65,9 +63,13 @@ public class Forum extends AppCompatActivity {
     }
 
     private void loadPosts() {
-        List<Post> postList = db.getAllPosts();
-        postAdapter = new PostAdapter(this, postList);
-        recyclerViewPosts.setAdapter(postAdapter);
+        FirebaseHelper.getAllPosts(new FirebaseHelper.PostCallback() {
+            @Override
+            public void onCallback(List<Post> postList) {
+                postAdapter = new PostAdapter(Forum.this, postList);
+                recyclerViewPosts.setAdapter(postAdapter);
+            }
+        });
     }
 
     @Override

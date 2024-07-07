@@ -44,8 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editContent"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginStart="147dp"
+        android:layout_marginTop="23dp"
         android:backgroundTint="#FF5722"
         android:text="Chọn ảnh" />
 
@@ -54,8 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/btnSelectImage"
-        android:layout_marginStart="79dp"
-        android:layout_marginTop="-1dp"
+        android:layout_marginStart="-93dp"
+        android:layout_marginTop="424dp"
         android:layout_toEndOf="@id/btnSelectImage"
         android:backgroundTint="#4CAF50"
         android:text="Đăng" />

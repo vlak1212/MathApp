@@ -21,14 +21,10 @@ public class CreatePost extends AppCompatActivity {
     private ImageView imageViewSelected;
     private Bitmap selectedImageBitmap;
 
-    private DatabaseHelper db;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
-
-        db = new DatabaseHelper(this);
 
         editTextEmail = findViewById(R.id.editEmail);
         editTextTitle = findViewById(R.id.editTitle);
@@ -68,8 +64,8 @@ public class CreatePost extends AppCompatActivity {
         String content = editTextContent.getText().toString().trim();
         byte[] image = selectedImageBitmap != null ? com.example.ocr2.Utils.getBytes(selectedImageBitmap) : null;
 
-        Post post = new Post(title, content, email, image);
-        db.addPost(post);
+        Post post = new Post(email, title, content, image);
+        FirebaseHelper.addPost(post);
 
         finish();
     }

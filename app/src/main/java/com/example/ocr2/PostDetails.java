@@ -32,15 +32,12 @@ public class PostDetails extends AppCompatActivity {
     private RecyclerView recyclerViewComments;
     private CommentAdapter commentAdapter;
 
-    private DatabaseHelper db;
-    private int postId;
+    private String postId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_details);
-
-       db = new DatabaseHelper(this);
 
         textViewPostTitle = findViewById(R.id.PostTitle);
         textViewPostEmail = findViewById(R.id.PostEmail);
@@ -56,7 +53,7 @@ public class PostDetails extends AppCompatActivity {
 
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
 
-        postId = getIntent().getIntExtra("postId", -1);
+        postId = getIntent().getStringExtra("postId");
 
         loadPostDetails(postId);
         loadComments(postId);
@@ -65,24 +62,35 @@ public class PostDetails extends AppCompatActivity {
         btnPostComment.setOnClickListener(v -> postComment());
     }
 
-    private void loadPostDetails(int postId) {
-        Post post = db.getPost(postId);
-        textViewPostTitle.setText(post.getTitle());
-        textViewPostEmail.setText(post.getEmail());
-        textViewPostContent.setText(post.getContent());
+    private void loadPostDetails(String postId) {
+        FirebaseHelper.getPost(postId, new FirebaseHelper.PostCallback() {
+            @Override
+            public void onCallback(List<Post> postList) {
+                if (!postList.isEmpty()) {
+                    Post post = postList.get(0);
+                    textViewPostTitle.setText(post.getTitle());
+                    textViewPostEmail.setText(post.getEmail());
+                    textViewPostContent.setText(post.getContent());
 
-        if (post.getImage() != null) {
-            imageViewPost.setImageBitmap(com.example.ocr2.Utils.getImage(post.getImage()));
-            imageViewPost.setVisibility(View.VISIBLE);
-        } else {
-            imageViewPost.setVisibility(View.GONE);
-        }
+                    if (post.getImage() != null) {
+                        imageViewPost.setImageBitmap(Utils.getImage(post.getImage()));
+                        imageViewPost.setVisibility(View.VISIBLE);
+                    } else {
+                        imageViewPost.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
-    private void loadComments(int postId) {
-        List<Comment> commentList = db.getAllCommentsForPost(postId);
-        commentAdapter = new CommentAdapter(this, commentList);
-        recyclerViewComments.setAdapter(commentAdapter);
+    private void loadComments(String postId) {
+        FirebaseHelper.getAllCommentsForPost(postId, new FirebaseHelper.CommentCallback() {
+            @Override
+            public void onCallback(List<Comment> commentList) {
+                commentAdapter = new CommentAdapter(PostDetails.this, commentList);
+                recyclerViewComments.setAdapter(commentAdapter);
+            }
+        });
     }
 
     private void imagePicker() {
@@ -109,10 +117,10 @@ public class PostDetails extends AppCompatActivity {
     private void postComment() {
         String email = editTextCommentEmail.getText().toString().trim();
         String content = editTextCommentContent.getText().toString().trim();
-        byte[] image = selectedCommentImageBitmap != null ? com.example.ocr2.Utils.getBytes(selectedCommentImageBitmap) : null;
+        byte[] image = selectedCommentImageBitmap != null ? Utils.getBytes(selectedCommentImageBitmap) : null;
 
         Comment comment = new Comment(postId, email, content, image);
-        db.addComment(comment);
+        FirebaseHelper.addComment(comment);
 
         loadComments(postId);
 

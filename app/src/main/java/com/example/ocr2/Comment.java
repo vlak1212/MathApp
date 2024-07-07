@@ -1,34 +1,34 @@
 package com.example.ocr2;
 
 public class Comment {
-    private int id;
-    private int postId;
+    private String id;
+    private String postId;
     private String email;
     private String content;
     private byte[] image;
 
     public Comment() {}
 
-    public Comment(int postId, String email, String content, byte[] image) {
+    public Comment(String postId, String email, String content, byte[] image) {
         this.postId = postId;
         this.email = email;
         this.content = content;
         this.image = image;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getPostId() {
+    public String getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(String postId) {
         this.postId = postId;
     }
 
