@@ -203,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         Content content = new Content.Builder()
-                .addText("Chỉ trả lời kết quả của bài toán trong ảnh, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
-                .addImage(img)
+                .addText("Chỉ trả lời kết quả của bài toán trên, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
+                .addText(String.valueOf(editTextResult.getText()))
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

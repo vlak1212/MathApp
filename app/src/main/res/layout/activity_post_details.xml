@@ -1,87 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".PostDetails">
 
-    <TextView
-        android:id="@+id/PostTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="25sp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/PostEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:background="@drawable/edittext_background"
-        android:layout_marginTop="4dp" />
+        <TextView
+            android:id="@+id/PostTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/PostContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_background"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/PostEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:background="@drawable/edittext_background"
+            android:layout_marginTop="4dp" />
 
-    <ImageView
-        android:id="@+id/imageViewPost"
-        android:layout_width="379dp"
-        android:layout_height="163dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_background"
-        android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/PostContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_background"
+            android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/CommentEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_background"
-        android:hint="Email"
-        android:layout_marginTop="16dp" />
+        <ImageView
+            android:id="@+id/imageViewPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_background"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true" />
 
-    <EditText
-        android:id="@+id/CommentContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_background"
+        <EditText
+            android:id="@+id/CommentEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_background"
+            android:hint="Email"
+            android:layout_marginTop="16dp" />
 
-        android:hint="Bình luận"
-        android:layout_marginTop="8dp" />
+        <EditText
+            android:id="@+id/CommentContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_background"
+            android:hint="Bình luận"
+            android:layout_marginTop="8dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonCommentImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chọn ảnh"
-        android:background="@drawable/button_background3"
-        android:layout_marginTop="8dp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonCommentImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn ảnh"
+            android:background="@drawable/button_background3"
+            android:layout_marginTop="8dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonPostComment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_background3"
-        android:text="Đăng bình luận" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonPostComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_background3"
+            android:text="Đăng bình luận" />
 
-    <ImageView
-        android:id="@+id/imageCommentSelected"
-        android:layout_width="387dp"
-        android:layout_height="133dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="centerCrop" />
+        <ImageView
+            android:id="@+id/imageCommentSelected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/BG2"
-        android:layout_width="387dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:padding="16dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/BG2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="16dp" />
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -11,6 +11,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.IOException;
 
@@ -33,6 +37,33 @@ public class CreatePost extends AppCompatActivity {
         Button btnSelectImage = findViewById(R.id.btnSelectImage);
         Button btnPost = findViewById(R.id.btnPost);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_forum);
+        bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_forum) {
+                startActivity(new Intent(CreatePost.this, Forum.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_home) {
+                startActivity(new Intent(CreatePost.this, MainActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_calculator) {
+                startActivity(new Intent(CreatePost.this, Calculator.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_graph) {
+                startActivity(new Intent(CreatePost.this, GraphOptions.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_history) {
+                startActivity(new Intent(CreatePost.this, History.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else
+                return false;
+        });
         btnSelectImage.setOnClickListener(v -> imagePicker());
         btnPost.setOnClickListener(v -> post());
     }

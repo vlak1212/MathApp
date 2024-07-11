@@ -10,36 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="#666666"
-    android:padding="16dp">
+        android:background="@drawable/title_background"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/HistoryTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Lịch sử"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#000000"></TextView>
-</RelativeLayout>
-
-<androidx.recyclerview.widget.RecyclerView
-android:id="@+id/BG1"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_below="@id/titleContainer"
-android:layout_margin="16dp"
-android:scrollbars="vertical" />
-
-<com.google.android.material.bottomnavigation.BottomNavigationView
-android:id="@+id/bottom_navigation"
-android:layout_width="match_parent"
-android:layout_height="65dp"
-android:layout_alignParentBottom="true"
-app:itemIconTint="@color/bottom_nav_item_color"
-app:itemTextColor="@color/bottom_nav_item_color"
-app:labelVisibilityMode="labeled"
-app:menu="@menu/bottom_navigation_menu" />
-
+        <TextView
+            android:id="@+id/HistoryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Lịch sử"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-medium"
+            android:shadowColor="#000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1.5" />
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/BG1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/titleContainer"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_margin="16dp"
+        android:scrollbars="vertical" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_navigation_menu" />
+
+</RelativeLayout>
