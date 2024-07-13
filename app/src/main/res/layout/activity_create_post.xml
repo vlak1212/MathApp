@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:hint="* Tiêu đề"
         android:padding="8dp"
+        android:inputType="text"
         android:background="@drawable/edittext_background"
         android:layout_below="@id/textViewTitle"
         android:layout_marginTop="16dp"
@@ -38,14 +39,16 @@
         android:id="@+id/editEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="* Email"
+        android:hint="* Email (thông báo về email nếu có người trả lời)"
         android:background="@drawable/edittext_background"
         android:padding="8dp"
+        android:inputType="text"
         android:layout_below="@id/editTitle"
         android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/editContent"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editEmail"
