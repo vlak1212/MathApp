@@ -75,20 +75,22 @@ public class FirebaseHelper {
         });
     }
     public static void getEmailFromId(String postId, final EmailCallback callback) {
-        postsRef.whereEqualTo("id", postId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String email = document.getString("email");
-                        callback.onCallback(email);
-                        return;
+        postsRef.whereEqualTo("id", postId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String email = document.getString("email");
+                                callback.onCallback(email);
+                                return;
+                            }
+                        } else {
+                            callback.onCallback(null);
+                        }
                     }
-                } else {
-                    callback.onCallback(null);
-                }
-            }
-        });
+                });
     }
     public static void addPost(Post post) {
         String imageData = convertImageToBase64(post.getImage());

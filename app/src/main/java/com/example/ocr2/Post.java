@@ -9,18 +9,18 @@ public class Post {
 
     public Post() {}
 
-    public Post(String title, String content, String email, byte[] image) {
+    public Post(String title, String email, String content, byte[] image) {
         this.title = title;
-        this.content = content;
         this.email = email;
+        this.content = content;
         this.image = image;
     }
 
-    public Post(String id, String title, String content, String email, byte[] image) {
+    public Post(String id, String title, String email, String content, byte[] image) {
         this.id = id;
         this.title = title;
-        this.content = content;
         this.email = email;
+        this.content = content;
         this.image = image;
     }
 

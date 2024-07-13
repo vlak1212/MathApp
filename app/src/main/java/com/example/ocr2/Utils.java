@@ -6,7 +6,8 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 
 public class Utils {
-
+    public static final  String EMAIL = "vlak1414tk@gmail.com";
+    public static final String PASSWORD = "qrse wbfs dlic vhaf";
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);

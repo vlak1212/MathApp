@@ -32,19 +32,22 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude("META-INF/NOTICE.md")
+    }
 }
 
 dependencies {
     implementation ("com.google.mlkit:text-recognition:16.0.0")
-    // implementation ("com.google.android.gms:play-services-gemini:1.0.0")
-    // implementation("com.google.mlkit:ocr:16.0.0")
-    // implementation("com.google.android.gms:play-services-mlkit-text-recognition:18.0.0")
-    // implementation("org.tensorflow:tensorflow-lite:0.0.0-nightly")
+
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.jjoe64:graphview:4.2.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(files("libs/mail.jar"))
+    implementation(files("libs/activation.jar"))
+    implementation(files("libs/additionnal.jar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -58,14 +61,14 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+
     implementation("com.firebaseui:firebase-ui-database:8.0.2")
-    // FirebaseUI for Cloud Firestore
     implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
-    // FirebaseUI for Firebase Auth
     implementation("com.firebaseui:firebase-ui-auth:8.0.2")
-    // FirebaseUI for Cloud Storage
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.squareup.picasso:picasso:2.71828")
     annotationProcessor("androidx.room:room-compiler:2.5.0")
+
+
 
 }

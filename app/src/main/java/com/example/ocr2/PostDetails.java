@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -124,17 +125,33 @@ public class PostDetails extends AppCompatActivity {
         if (!TextUtils.isEmpty(content)) {
             Comment comment = new Comment(postId, email, content, image);
             FirebaseHelper.addComment(comment);
-
             loadComments(postId);
             editTextCommentContent.setText("");
             imageViewCommentSelected.setVisibility(View.GONE);
             selectedCommentImageBitmap = null;
+            FirebaseHelper.getEmailFromId(postId, new FirebaseHelper.EmailCallback() {
+                @Override
+                public void onCallback(String email) {
+                    if (email != null) {
+                        sendEmail(email);
+                    } else {
+                    }
+                }
+            });
         } else {
-            showEmptyCommentError();
+            emptyComment();
         }
     }
+    private void sendEmail(String email) {
+        String emailsend = email;
+        String emailsubject = "Email từ MathApp";
+        String emailbody = "Có người vừa bình luận về câu hỏi của bạn trên MathApp";
 
-    private void showEmptyCommentError() {
+        Email javaMailAPI = new Email(this, email, emailsubject, emailbody);
+
+        javaMailAPI.execute();
+    }
+    private void emptyComment() {
         Toast.makeText(this, "Ô bình luận không được phép trống", Toast.LENGTH_SHORT).show();
     }
 }

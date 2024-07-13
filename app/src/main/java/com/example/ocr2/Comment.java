@@ -1,7 +1,7 @@
 package com.example.ocr2;
 
 public class Comment {
-    private String id;
+
     private String postId;
     private String email;
     private String content;
@@ -16,13 +16,7 @@ public class Comment {
         this.image = image;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getPostId() {
         return postId;
