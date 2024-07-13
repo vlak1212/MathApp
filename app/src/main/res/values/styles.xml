@@ -26,4 +26,8 @@
     </style>
     <style name="ChalkboardText">
         <item name="android:fontFamily">@font/chalk</item> </style>
+    <style name="MarkerText">
+        <item name="android:fontFamily">@font/marker3</item> </style>
+    <style name="ChalkboardTextVN">
+        <item name="android:fontFamily">@font/chalk2</item> </style>
 </resources>

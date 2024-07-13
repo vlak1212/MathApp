@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class CreatePost extends AppCompatActivity {
 
@@ -91,16 +92,32 @@ public class CreatePost extends AppCompatActivity {
             }
         }
     }
+    private String generateId() {
+        Random random = new Random();
+        StringBuilder idBuilder = new StringBuilder();
 
+        for (int i = 0; i < 3; i++) {
+            int digit = random.nextInt(10);
+            idBuilder.append(digit);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            char letter = (char) (random.nextInt(26) + 'A');
+            idBuilder.append(letter);
+        }
+
+        return idBuilder.toString();
+    }
     private void post() {
         String email = editTextEmail.getText().toString().trim();
         String title = editTextTitle.getText().toString().trim();
         String content = editTextContent.getText().toString().trim();
+        String id = generateId();
         byte[] image = selectedImageBitmap != null ? com.example.ocr2.Utils.getBytes(selectedImageBitmap) : null;
 
         if (isValidEmail(email)) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
-                Post post = new Post(email, title, content, image);
+                Post post = new Post(id, email, title, content, image);
                 FirebaseHelper.addPost(post);
                 Toast.makeText(this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
                 finish();

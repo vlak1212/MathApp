@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -21,31 +22,31 @@ public class FirebaseHelper {
     private static final CollectionReference commentsRef = db.collection("comments");
 
     public static void getAllPosts(final PostCallback callback) {
-        postsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<Post> postList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Post post = new Post();
-                        post.setId(document.getString("id"));
-                        post.setTitle(document.getString("title"));
-                        post.setEmail(document.getString("email"));
-                        post.setContent(document.getString("content"));
-                        String imageBase64 = document.getString("image");
-                        if (imageBase64 != null && !imageBase64.isEmpty()) {
-                            byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
-                            post.setImage(decodedString);
+        postsRef.orderBy("timestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Post> postList = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Post post = new Post();
+                            post.setId(document.getString("id"));
+                            post.setTitle(document.getString("title"));
+                            post.setEmail(document.getString("email"));
+                            post.setContent(document.getString("content"));
+                            String imageBase64 = document.getString("image");
+                            if (imageBase64 != null && !imageBase64.isEmpty()) {
+                                byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                                post.setImage(decodedString);
+                            }
+                            postList.add(post);
                         }
-                        postList.add(post);
-                    }
-                    callback.onCallback(postList);
-                } else {
+                        callback.onCallback(postList);
+                    } else {
 
-                }
-            }
-        });
+                    }
+                });
     }
+
 
     public static void getPost(String postId, final PostCallback callback) {
         postsRef.whereEqualTo("id", postId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -92,13 +93,21 @@ public class FirebaseHelper {
     public static void addPost(Post post) {
         String imageData = convertImageToBase64(post.getImage());
         Map<String, Object> P = new HashMap<>();
-        P.put("id", post.getId());
+        long timestamp = System.currentTimeMillis();
+        String postId = post.getId();
+        if (postId == null || postId.isEmpty()) {
+            postId = postsRef.document().getId();
+            post.setId(postId);
+        }
+        P.put("id", postId);
         P.put("title", post.getTitle());
         P.put("email", post.getEmail());
         P.put("content", post.getContent());
         P.put("image", imageData);
-        postsRef.add(P);
+        P.put("timestamp", timestamp);
+        postsRef.document(postId).set(P);
     }
+
 
     public static void getAllCommentsForPost(String postId, final CommentCallback callback) {
         commentsRef.whereEqualTo("postId", postId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

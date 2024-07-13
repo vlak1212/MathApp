@@ -19,7 +19,7 @@
             android:layout_centerInParent="true"
             android:text="LỊCH SỬ"
             style="@style/ChalkboardText"
-            android:textSize="30sp"
+            android:textSize="40sp"
             android:textColor="@color/white"
           />
     </RelativeLayout>

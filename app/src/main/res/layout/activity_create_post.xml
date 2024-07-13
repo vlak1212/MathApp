@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CCCCCC"
+    android:background="@drawable/bg2"
     tools:context=".CreatePost">
 
     <TextView
@@ -14,7 +14,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Đặt câu hỏi"
-        android:textSize="24sp"
+        style="@style/MarkerText"
+        android:textSize="39sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:shadowColor="#A8A8A8"
@@ -61,24 +62,30 @@
         android:layout_below="@id/editContent"
         android:layout_marginTop="16dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSelectImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/MarkerText"
+            android:layout_width="104dp"
+            android:layout_height="42dp"
+            android:background="@drawable/button_background1"
             android:backgroundTint="#FF5722"
             android:text="Chọn ảnh"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnPost"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#4CAF50"
+            android:background="@drawable/button_background1"
             android:text="Đăng"
+            style="@style/MarkerText"
+            android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnSelectImage"
             app:layout_constraintTop_toTopOf="parent"

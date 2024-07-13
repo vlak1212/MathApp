@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg2"
     tools:context=".PostDetails">
 
     <LinearLayout
@@ -16,7 +17,8 @@
             android:layout_height="wrap_content"
             android:text="Câu hỏi:"
             android:textStyle="bold"
-            android:textSize="18sp"
+            style="@style/MarkerText"
+            android:textSize="35sp"
             android:layout_marginBottom="4dp" />
 
         <TextView
@@ -24,23 +26,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="25sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email:"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/PostEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="italic"
-            android:background="@drawable/edittext_background"
+            android:textSize="15sp"
+            android:background="@color/fui_transparent"
             android:layout_marginTop="4dp" />
 
         <TextView
@@ -48,7 +42,8 @@
             android:layout_height="wrap_content"
             android:text="Nội dung:"
             android:textStyle="bold"
-            android:textSize="18sp"
+            style="@style/MarkerText"
+            android:textSize="30sp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp" />
 
@@ -56,7 +51,7 @@
             android:id="@+id/PostContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_background"
+            android:background="@color/fui_transparent"
             android:layout_marginTop="8dp" />
 
         <ImageView
@@ -71,9 +66,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bình luận"
+            android:text="Bình luận:"
             android:textStyle="bold"
-            android:textSize="18sp"
+            style="@style/MarkerText"
+            android:textSize="35sp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="4dp" />
 
@@ -99,7 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Chọn ảnh"
-
+            style="@style/MarkerText"
+            android:textSize="30sp"
             android:background="@drawable/button_background3"
             android:layout_marginTop="8dp" />
 
@@ -108,6 +105,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            style="@style/MarkerText"
+            android:textSize="30sp"
             android:background="@drawable/button_background3"
             android:text="Đăng bình luận" />
 
@@ -125,6 +124,5 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:padding="16dp" />
-
     </LinearLayout>
 </ScrollView>

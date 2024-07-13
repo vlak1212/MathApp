@@ -4,21 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#CCCCCC"
+    android:background="@drawable/bg2"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/Rec"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Phương trình"
-        android:textSize="18sp"
+        android:text="Phươnng trình"
+        android:textSize="35sp"
         android:textStyle="bold"
+        style="@style/MarkerText"
+        android:textColor="@color/black"
         android:gravity="center"
         android:paddingBottom="16dp" />
 
     <LinearLayout
         android:id="@+id/Input"
+        style="@style/MarkerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
@@ -27,7 +30,10 @@
         android:id="@+id/buttonPlot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Vẽ đồ thị" />
+        style="@style/MarkerText"
+        android:textSize="25sp"
+        android:text="Vẽ đồ thị"
+        />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graphView"

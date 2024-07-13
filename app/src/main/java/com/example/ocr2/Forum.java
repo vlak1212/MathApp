@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.ocr2.Adapter.PostAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,7 +29,7 @@ public class Forum extends AppCompatActivity {
         recyclerViewPosts = findViewById(R.id.recyclerViewPosts);
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        Button btnCreatePost = findViewById(R.id.buttonCreatePost);
+        ImageButton btnCreatePost = findViewById(R.id.buttonCreatePost);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_forum);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
