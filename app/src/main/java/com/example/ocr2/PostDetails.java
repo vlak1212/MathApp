@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -119,14 +121,20 @@ public class PostDetails extends AppCompatActivity {
         String content = editTextCommentContent.getText().toString().trim();
         byte[] image = selectedCommentImageBitmap != null ? Utils.getBytes(selectedCommentImageBitmap) : null;
 
-        Comment comment = new Comment(postId, email, content, image);
-        FirebaseHelper.addComment(comment);
+        if (!TextUtils.isEmpty(content)) {
+            Comment comment = new Comment(postId, email, content, image);
+            FirebaseHelper.addComment(comment);
 
-        loadComments(postId);
+            loadComments(postId);
+            editTextCommentContent.setText("");
+            imageViewCommentSelected.setVisibility(View.GONE);
+            selectedCommentImageBitmap = null;
+        } else {
+            showEmptyCommentError();
+        }
+    }
 
-        editTextCommentEmail.setText("");
-        editTextCommentContent.setText("");
-        imageViewCommentSelected.setVisibility(View.GONE);
-        selectedCommentImageBitmap = null;
+    private void showEmptyCommentError() {
+        Toast.makeText(this, "Ô bình luận không được phép trống", Toast.LENGTH_SHORT).show();
     }
 }

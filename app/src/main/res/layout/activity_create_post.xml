@@ -7,33 +7,50 @@
     android:background="#CCCCCC"
     tools:context=".CreatePost">
 
-    <EditText
-        android:id="@+id/editEmail"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:padding="8dp"
-        android:background="@drawable/edittext_background"
-        android:layout_marginBottom="8dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Đặt câu hỏi"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="3" />
 
     <EditText
         android:id="@+id/editTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tiêu đề"
+        android:hint="* Tiêu đề"
+        android:padding="8dp"
+        android:background="@drawable/edittext_background"
+        android:layout_below="@id/textViewTitle"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/editEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="* Email"
         android:background="@drawable/edittext_background"
         android:padding="8dp"
-        android:layout_below="@id/editEmail"
+        android:layout_below="@id/editTitle"
         android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/editContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTitle"
+        android:layout_below="@id/editEmail"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_background"
-        android:hint="Nội dung"
+        android:hint="* Nội dung câu hỏi"
         android:minHeight="200dp"
         android:padding="8dp" />
 
@@ -54,7 +71,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <Button
             android:id="@+id/btnPost"
@@ -65,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnSelectImage"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -122,7 +122,7 @@ public class Calculator extends AppCompatActivity {
                     double r = Math.sqrt(Double.parseDouble(str));
                     stScreen.setText(String.valueOf(r));
                 } catch (NumberFormatException e) {
-                    showToast("Invalid input");
+                    showToast("Đầu vào không hợp lệ");
                 }
             }
         });
@@ -133,7 +133,7 @@ public class Calculator extends AppCompatActivity {
                 stScreen.setText(String.valueOf(result));
                 ndScreen.setText(str);
             } catch (Exception e) {
-                showToast("Invalid expression");
+                showToast("Biểu thức không hợp lệ");
                 stScreen.setText("");
             }
         });
@@ -150,7 +150,7 @@ public class Calculator extends AppCompatActivity {
         });
         btnSquare.setOnClickListener(v -> {
             if (stScreen.getText().toString().isEmpty()) {
-                showToast("Please enter a valid number..");
+                showToast("Vui lòng nhập một số hợp lệ.");
             } else {
                 try {
                     double d = Double.parseDouble(stScreen.getText().toString());
@@ -158,13 +158,13 @@ public class Calculator extends AppCompatActivity {
                     stScreen.setText(String.valueOf(square));
                     ndScreen.setText(d + "²");
                 } catch (NumberFormatException e) {
-                    showToast("Invalid input");
+                    showToast("Đầu vào không hợp lệ");
                 }
             }
         });
         btnFact.setOnClickListener(v -> {
             if (stScreen.getText().toString().isEmpty()) {
-                showToast("Please enter a valid number..");
+                showToast("Vui lòng nhập một số hợp lệ.");
             } else {
                 try {
                     int value = Integer.parseInt(stScreen.getText().toString());
@@ -172,7 +172,7 @@ public class Calculator extends AppCompatActivity {
                     stScreen.setText(String.valueOf(fact));
                     ndScreen.setText(value + "!");
                 } catch (NumberFormatException e) {
-                    showToast("Invalid input");
+                    showToast("Đầu vào không hợp lệ");
                 } catch (IllegalArgumentException e) {
                     showToast(e.getMessage());
                 }
@@ -215,7 +215,7 @@ public class Calculator extends AppCompatActivity {
             double parse() {
                 nextChar();
                 double x = parseExpression();
-                if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char) ch);
+                if (pos < str.length()) throw new RuntimeException("Không mong đợi: " + (char) ch);
                 return x;
             }
 

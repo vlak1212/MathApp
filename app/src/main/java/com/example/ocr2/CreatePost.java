@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -95,9 +98,33 @@ public class CreatePost extends AppCompatActivity {
         String content = editTextContent.getText().toString().trim();
         byte[] image = selectedImageBitmap != null ? com.example.ocr2.Utils.getBytes(selectedImageBitmap) : null;
 
-        Post post = new Post(email, title, content, image);
-        FirebaseHelper.addPost(post);
+        if (isValidEmail(email)) {
+            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+                Post post = new Post(email, title, content, image);
+                FirebaseHelper.addPost(post);
+                Toast.makeText(this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                emptyField();
+            }
+        } else {
+            wrongEmail();
+        }
+    }
 
-        finish();
+    private boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void wrongEmail() {
+        new AlertDialog.Builder(this)
+                .setTitle("Lỗi")
+                .setMessage("Không đúng định dạng email")
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+    private void emptyField() {
+        Toast.makeText(this, "Vui lòng nhập đầy đủ câu hỏi, nội dung và email", Toast.LENGTH_SHORT).show();
     }
 }

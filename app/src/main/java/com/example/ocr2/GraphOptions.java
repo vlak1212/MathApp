@@ -21,8 +21,6 @@ public class GraphOptions extends AppCompatActivity {
         Button btn3 = findViewById(R.id.buttonB3);
         Button btn4 = findViewById(R.id.buttonB4);
         Button btnLog = findViewById(R.id.buttonLogg);
-//        Button btnSin = findViewById(R.id.buttonSinn);
-//        Button btnCos = findViewById(R.id.buttonCoss);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_graph);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);

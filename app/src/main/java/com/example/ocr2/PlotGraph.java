@@ -46,16 +46,16 @@ public class PlotGraph extends AppCompatActivity {
         String label = "";
         switch (type) {
             case 1:
-                label = "Phương trình bậc 1: ax + b = 0";
+                label = "Phương trình bậc 1: y = ax + b ";
                 break;
             case 2:
-                label = "Phương trình bậc 2: ax<sup><small>2</small></sup> + bx + c = 0";
+                label = "Phương trình bậc 2: y = ax<sup><small>2</small></sup> + bx + c";
                 break;
             case 3:
-                label = "Phương trình bậc 3: ax<sup><small>3</small></sup> + bx<sup><small>2</small></sup> + cx + d = 0";
+                label = "Phương trình bậc 3: y = ax<sup><small>3</small></sup> + bx<sup><small>2</small></sup> + cx + d";
                 break;
             case 4:
-                label = "Phương trình bậc 4: ax<sup><small>4</small></sup> + bx<sup><small>3</small></sup> + cx<sup><small>2</small></sup> + dx + e = 0";
+                label = "Phương trình bậc 4: y = ax<sup><small>4</small></sup> + bx<sup><small>3</small></sup> + cx<sup><small>2</small></sup> + dx + e";
                 break;
             case 5:
                 label = "Đồ thị hàm số: y = sin(x)";
@@ -113,7 +113,7 @@ public class PlotGraph extends AppCompatActivity {
             for (int i = 0; i < inputBox.getChildCount(); i++) {
                 LinearLayout layout = (LinearLayout) inputBox.getChildAt(i);
                 EditText editText = (EditText) layout.getChildAt(1);
-                String input = editText.getText().toString();
+                String input = editText.getText().toString().trim();
                 if (input.isEmpty()) {
                     Toast.makeText(this, "Vui lòng nhập đầy đủ hệ số", Toast.LENGTH_SHORT).show();
                     return;
@@ -129,7 +129,7 @@ public class PlotGraph extends AppCompatActivity {
             for (int i = 0; i < inputBox.getChildCount(); i++) {
                 LinearLayout layout = (LinearLayout) inputBox.getChildAt(i);
                 EditText editText = (EditText) layout.getChildAt(1);
-                String input = editText.getText().toString();
+                String input = editText.getText().toString().trim();
                 if (input.isEmpty()) {
                     Toast.makeText(this, "Vui lòng nhập đầy đủ giá trị x", Toast.LENGTH_SHORT).show();
                     return;
@@ -159,8 +159,8 @@ public class PlotGraph extends AppCompatActivity {
         graphView.addSeries(series);
 
         graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setMinX(xStart);
-        graphView.getViewport().setMaxX(xEnd);
+        graphView.getViewport().setMinX(-10);
+        graphView.getViewport().setMaxX(10);
         graphView.getViewport().setYAxisBoundsManual(true);
         graphView.getViewport().setMinY(-10);
         graphView.getViewport().setMaxY(10);
@@ -171,6 +171,12 @@ public class PlotGraph extends AppCompatActivity {
 
         graphView.getViewport().setScalable(true);
         graphView.getViewport().setScalableY(true);
+
+        graphView.getViewport().setScrollable(true);
+        graphView.getViewport().setScrollableY(true);
+
+        graphView.getViewport().setXAxisBoundsManual(true);
+        graphView.getViewport().setYAxisBoundsManual(true);
 
         graphView.getGridLabelRenderer().setHorizontalAxisTitle("X");
         graphView.getGridLabelRenderer().setNumHorizontalLabels(21);
@@ -210,3 +216,4 @@ public class PlotGraph extends AppCompatActivity {
     }
 
 }
+

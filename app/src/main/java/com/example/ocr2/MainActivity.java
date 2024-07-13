@@ -1,8 +1,11 @@
 package com.example.ocr2;
 
+import android.app.MediaRouteButton;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private EditText editTextResult;
 
+    private Button buttonSolution;
     private EditText editResult;
-    private Button captureBtn;
+
     private Bitmap imgP;
     private String txt;
 
@@ -58,9 +62,10 @@ public class MainActivity extends AppCompatActivity {
         Button buttonCapture = findViewById(R.id.buttonCapture);
         Button buttonUpload = findViewById(R.id.buttonUpload);
         Button buttonAIsolve  = findViewById(R.id.solveWithAI);
-        //FloatingActionButton buttonHistory = findViewById(R.id.historyButton);
-        //Button buttonSolve  = findViewById(R.id.solve);
-        //ImageButton buttonCalculator = findViewById(R.id.buttonCalculator);
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.red);
+//        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
+//        buttonAIsolve.setBackground(bitmapDrawable);
+        buttonSolution = findViewById(R.id.buttonSolution);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
@@ -88,56 +93,25 @@ public class MainActivity extends AppCompatActivity {
         });
         db = HistoryDatabase.getInstance(this);
         buttonCapture.setOnClickListener(v -> dispatchTakePictureIntent());
-//        buttonCapture.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-//            }
-//        });
         buttonUpload.setOnClickListener(v -> dispatchPickImageIntent());
 
-//        buttonSolve.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String txtP = editTextResult.getText().toString();
-//                if (txtP != null && !txtP.isEmpty()) {
-//                    MathSolver solver = new MathSolver();
-//                    String result = solver.mathSolving(txtP);
-//                    editTextResult.setText(result);
-//                    //saveToDatabase(txtP, result);
-//                    new Thread(() -> {
-//                        db.historyDao().insert(new HistoryItem(txtP, result));
-//                    }).start();
-//                } else {
-//                    Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
         buttonAIsolve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imgP != null) {
-                    hoiGemini(imgP);
-                    //saveToDatabase(editTextResult.getText().toString(), editResult.getText().toString());
-//                    new Thread(() -> {
-//                        db.historyDao().insert(new HistoryItem(editTextResult.getText().toString(), editResult.getText().toString()));
-//                    }).start();
+                if (editTextResult.getText() != null) {
+                    hoiGemini(String.valueOf(editTextResult.getText()));
                 } else {
-                    Toast.makeText(MainActivity.this, "Không có ảnh đầu vào", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        buttonSolution.setOnClickListener(v -> {
+            if (!editTextResult.getText().toString().isEmpty()) {
+                layLoiGiai(editTextResult.getText().toString());
+            }
+        });
     }
-//    private void saveToDatabase(String problem, String result) {
-//        boolean isInserted = dbHelper.addData(problem, result);
-//        if (isInserted) {
-//            Toast.makeText(MainActivity.this, "Đã lưu vào lịch sử", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(MainActivity.this, "Lưu thất bại", Toast.LENGTH_SHORT).show();
-//        }
-//    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -182,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
                     String resultText = processTextRecognitionResult(result);
                     txt = resultText;
                     imgP = image.getBitmapInternal();
-                    //editTextResult.setText(resultText);
                     anhGemini(imgP);
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
@@ -198,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
         return resultText.toString();
     }
 
-    private void hoiGemini(Bitmap img) {
+    private void hoiGemini(String txt) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         Content content = new Content.Builder()
                 .addText("Chỉ trả lời kết quả của bài toán trên, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
-                .addText(String.valueOf(editTextResult.getText()))
+                .addText(txt)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -214,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     String resultText = result.getText();
                     editResult.setText(resultText);
                     saveToDatabase(txt, resultText);
+                    buttonSolution.setVisibility(View.VISIBLE);
                 }
                 @Override
                 public void onFailure(Throwable t) {
@@ -238,6 +212,31 @@ public class MainActivity extends AppCompatActivity {
                     String resultText = result.getText();
                     editTextResult.setText(resultText);
                 }
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            }, this.getMainExecutor());
+        }
+    }
+    private void layLoiGiai(String problem) {
+        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
+                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+        Content content = new Content.Builder()
+                .addText("Giải chi tiết bài toán sau:")
+                .addText(problem)
+                .build();
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+                @Override
+                public void onSuccess(GenerateContentResponse result) {
+                    String solutionText = result.getText();
+                    editResult.setText(solutionText);
+                }
+
                 @Override
                 public void onFailure(Throwable t) {
                     t.printStackTrace();

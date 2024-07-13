@@ -26,9 +26,18 @@ public class Splash extends AppCompatActivity {
         SpannableString spannableString = new SpannableString(text);
 
         int[] colors = new int[]{
-                Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW,
-                Color.MAGENTA, Color.CYAN, Color.DKGRAY, Color.LTGRAY
+                Color.parseColor("#FF6F61"),
+                Color.parseColor("#2EC4B6"),
+                Color.parseColor("#FFD166"),
+                Color.parseColor("#A9DEF9"),
+                Color.parseColor("#EF476F"),
+                Color.parseColor("#06D6A0"),
+                Color.parseColor("#B2B1CF"),
+                Color.parseColor("#E63946")
         };
+
+
+
 
         for (int i = 0; i < text.length(); i++) {
             spannableString.setSpan(

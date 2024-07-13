@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CCCCCC">
+    android:background="@drawable/bg1">
 
     <ImageView
         android:id="@+id/imageView"
@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:padding="15dp"
         android:layout_marginBottom="7dp"
-        android:background="#e0e0e0"
+        android:background="@drawable/empty_img"
         android:contentDescription="Xem truoc anh"
         android:elevation="4dp"
         android:scaleType="fitCenter"
@@ -37,6 +37,7 @@
 
         <Button
             android:id="@+id/buttonCapture"
+            style="@style/ChalkboardText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -48,6 +49,7 @@
 
         <Button
             android:id="@+id/buttonUpload"
+            style="@style/ChalkboardText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -99,6 +101,7 @@
 
         <Button
             android:id="@+id/solveWithAI"
+            style="@style/ChalkboardText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
@@ -108,6 +111,7 @@
             android:elevation="4dp"
             android:padding="12dp"
             android:text="Giải"
+
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
@@ -135,6 +139,36 @@
         app:layout_constraintTop_toBottomOf="@id/buttonSolve"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/buttonLG"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Result"
+        app:layout_constraintVertical_bias="0.186">
+
+        <Button
+            android:id="@+id/buttonSolution"
+            style="@style/ChalkboardText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:layout_marginEnd="75dp"
+            android:layout_weight="1"
+            android:backgroundTint="#FF4C4C"
+            android:elevation="4dp"
+            android:padding="12dp"
+            android:text="Lời giải"
+            android:visibility="gone"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
