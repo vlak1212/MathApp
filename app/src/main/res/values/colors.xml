@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="darkgray">#80343a40</color>
+    <color name="darkgray">#D3D3D3</color>
     <color name="purple_200">#0F9D58</color>
     <color name="purple_500">#0F9D58</color>
     <color name="purple_700">#0F9D58</color>
@@ -12,7 +12,7 @@
     <color name="black_shade_2">#272B33</color>
     <color name="black_shade_3">#22252D</color>
     <color name="yellow">#ffa500</color>
-    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimary">#0056b3</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorBackground">#FAFAFA</color>
