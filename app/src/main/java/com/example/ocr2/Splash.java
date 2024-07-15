@@ -37,8 +37,6 @@ public class Splash extends AppCompatActivity {
         };
 
 
-
-
         for (int i = 0; i < text.length(); i++) {
             spannableString.setSpan(
                     new ForegroundColorSpan(colors[i % colors.length]),

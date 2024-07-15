@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/splashImage"
-        android:layout_width="259dp"
-        android:layout_height="261dp"
+        android:layout_width="230dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:scaleType="centerInside"
         android:src="@drawable/img_splash1" />

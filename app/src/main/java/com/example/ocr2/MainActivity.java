@@ -1,11 +1,10 @@
 package com.example.ocr2;
 
-import android.app.MediaRouteButton;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -33,15 +34,20 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.squareup.picasso.Picasso;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
-   // private DatabaseHelper dbHelper;
     private HistoryDatabase db;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
+    private static final int REQUEST_CAMERA_PERMISSION = 200;
+    private static final int REQUEST_STORAGE_PERMISSION = 201;
+
     private ImageView imageView;
     private EditText editTextResult;
 
@@ -62,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         Button buttonCapture = findViewById(R.id.buttonCapture);
         Button buttonUpload = findViewById(R.id.buttonUpload);
         Button buttonAIsolve  = findViewById(R.id.solveWithAI);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.red);
-//        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
-//        buttonAIsolve.setBackground(bitmapDrawable);
         buttonSolution = findViewById(R.id.buttonSolution);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
@@ -92,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
         db = HistoryDatabase.getInstance(this);
-        buttonCapture.setOnClickListener(v -> dispatchTakePictureIntent());
-        buttonUpload.setOnClickListener(v -> dispatchPickImageIntent());
+        buttonCapture.setOnClickListener(v -> requestCameraPermission());
+        buttonUpload.setOnClickListener(v -> requestStoragePermission());
 
 
         buttonAIsolve.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +115,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+    private void requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_STORAGE_PERMISSION);
+        } else {
+            dispatchPickImageIntent();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakePictureIntent();
+                } else {
+                    Toast.makeText(this, "Yêu cầu quyền sử dụng máy ảnh để chụp ảnh", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case REQUEST_STORAGE_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchPickImageIntent();
+                } else {
+                    Toast.makeText(this, "Yêu cầu quyền truy cập bộ sưu tập để tải ảnh lên", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -176,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         Content content = new Content.Builder()
-                .addText("Chỉ trả lời kết quả của bài toán trên, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
+                .addText("Chỉ trả lời kết quả chính xác theo toán học của bài toán trên, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
                 .addText(txt)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
