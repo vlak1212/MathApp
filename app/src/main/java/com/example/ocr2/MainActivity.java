@@ -1,7 +1,9 @@
 package com.example.ocr2;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
@@ -45,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
-    private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private static final int REQUEST_STORAGE_PERMISSION = 201;
 
     private ImageView imageView;
     private EditText editTextResult;
@@ -56,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Bitmap imgP;
     private String txt;
+
+    private static final String PREFS_NAME = "app_prefs";
+    private static final String CAMERA_PERMISSION_GRANTED = "camera_permission_granted";
+    private static final String STORAGE_PERMISSION_GRANTED = "storage_permission_granted";
+    private static final int REQUEST_CAMERA_PERMISSION = 100;
+    private static final int REQUEST_STORAGE_PERMISSION = 101;
 
 
     @Override
@@ -95,8 +101,22 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
         db = HistoryDatabase.getInstance(this);
-        buttonCapture.setOnClickListener(v -> requestCameraPermission());
-        buttonUpload.setOnClickListener(v -> requestStoragePermission());
+        buttonCapture.setOnClickListener(v -> {
+            if (!getCameraPermissionStatus()) {
+                showCameraPermissionDialog();
+            } else {
+                dispatchTakePictureIntent();
+            }
+        });
+
+        buttonUpload.setOnClickListener(v -> {
+            if (!getStoragePermissionStatus()) {
+                showStoragePermissionDialog();
+            } else {
+                dispatchPickImageIntent();
+            }
+        });
+
 
 
         buttonAIsolve.setOnClickListener(new View.OnClickListener() {
@@ -115,52 +135,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private boolean getCameraPermissionStatus() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getBoolean(CAMERA_PERMISSION_GRANTED, false);
+    }
+
+    private boolean getStoragePermissionStatus() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getBoolean(STORAGE_PERMISSION_GRANTED, false);
+    }
+    private void showCameraPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Yêu cầu Quyền Sử dụng Camera")
+                .setMessage("Ứng dụng cần quyền truy cập vào camera của bạn. Vui lòng cấp quyền để tiếp tục.")
+                .setPositiveButton("Cho phép", (dialog, which) -> {
+                    saveCameraPermissionStatus(true);
+                    requestCameraPermission();
+                })
+                .setNegativeButton("Từ chối", null)
+                .show();
+    }
+
+    private void showStoragePermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Yêu cầu Quyền Truy cập Bộ nhớ")
+                .setMessage("Ứng dụng cần quyền truy cập vào bộ nhớ của bạn. Vui lòng cấp quyền để tiếp tục.")
+                .setPositiveButton("Cho phép", (dialog, which) -> {
+                    saveStoragePermissionStatus(true);
+                    requestStoragePermission();
+                })
+                .setNegativeButton("Từ chối", null)
+                .show();
+    }
     private void requestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA_PERMISSION);
-        } else {
-            dispatchTakePictureIntent();
-        }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                REQUEST_CAMERA_PERMISSION);
     }
 
     private void requestStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_STORAGE_PERMISSION);
-        } else {
-            dispatchPickImageIntent();
-        }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                REQUEST_STORAGE_PERMISSION);
+    }
+    private void saveCameraPermissionStatus(boolean granted) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().putBoolean(CAMERA_PERMISSION_GRANTED, granted).apply();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CAMERA_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    dispatchTakePictureIntent();
-                } else {
-                    Toast.makeText(this, "Yêu cầu quyền sử dụng máy ảnh để chụp ảnh", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case REQUEST_STORAGE_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    dispatchPickImageIntent();
-                } else {
-                    Toast.makeText(this, "Yêu cầu quyền truy cập bộ sưu tập để tải ảnh lên", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
+    private void saveStoragePermissionStatus(boolean granted) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().putBoolean(STORAGE_PERMISSION_GRANTED, granted).apply();
     }
-
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -177,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 imageView.setImageBitmap(imageBitmap);
                 processImage(InputImage.fromBitmap(imageBitmap, 0));
