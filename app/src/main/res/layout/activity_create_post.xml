@@ -99,11 +99,11 @@
     <ImageView
         android:id="@+id/imageSelected"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="200dp"
         android:layout_below="@id/buttonContainer"
         android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintHeight_percent="0.25" />
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

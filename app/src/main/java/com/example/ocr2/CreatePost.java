@@ -2,6 +2,8 @@ package com.example.ocr2;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -19,12 +21,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 public class CreatePost extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final long TARGET_IMAGE_SIZE = 900 * 1024; // 900KB
+
     private EditText editTextEmail, editTextTitle, editTextContent;
     private ImageView imageViewSelected;
     private Bitmap selectedImageBitmap;
@@ -68,6 +75,7 @@ public class CreatePost extends AppCompatActivity {
             } else
                 return false;
         });
+
         btnSelectImage.setOnClickListener(v -> imagePicker());
         btnPost.setOnClickListener(v -> post());
     }
@@ -84,14 +92,51 @@ public class CreatePost extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             try {
-                selectedImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                imageViewSelected.setImageBitmap(selectedImageBitmap);
+                Uri imageUri = data.getData();
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                Bitmap originalBitmap = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+
+                if (getImageSize(originalBitmap) > MAX_IMAGE_SIZE) {
+                    Toast.makeText(this, "Ảnh quá lớn, vui lòng chọn ảnh khác dưới 5MB.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Bitmap resizedBitmap = resizeBitmapToMaxSize(originalBitmap, TARGET_IMAGE_SIZE);
+                imageViewSelected.setImageBitmap(resizedBitmap);
                 imageViewSelected.setVisibility(View.VISIBLE);
+                selectedImageBitmap = resizedBitmap;
+
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(this, "Không thể xử lý ảnh. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    private Bitmap resizeBitmapToMaxSize(Bitmap bitmap, long maxSize) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap resizedBitmap = bitmap;
+
+        int quality = 100;
+        while (getImageSize(resizedBitmap) > maxSize && quality > 10) {
+            baos.reset();
+            resizedBitmap.compress(Bitmap.CompressFormat.PNG, quality, baos);
+            byte[] byteArray = baos.toByteArray();
+            resizedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            quality -= 10;
+        }
+
+        return resizedBitmap;
+    }
+
+    private long getImageSize(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] byteArray = baos.toByteArray();
+        return byteArray.length;
+    }
+
     private String generateId() {
         Random random = new Random();
         StringBuilder idBuilder = new StringBuilder();
@@ -108,6 +153,7 @@ public class CreatePost extends AppCompatActivity {
 
         return idBuilder.toString();
     }
+
     private void post() {
         String title = editTextTitle.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();

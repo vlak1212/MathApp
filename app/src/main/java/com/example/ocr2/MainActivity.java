@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
@@ -15,11 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -36,8 +35,6 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.squareup.picasso.Picasso;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -294,7 +291,22 @@ public class MainActivity extends AppCompatActivity {
             }, this.getMainExecutor());
         }
     }
-    private void layLoiGiai(String problem) {
+    private void showSolutionDialog(String solutionText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        builder.setView(dialogView);
+
+        TextView solutionTextView = dialogView.findViewById(R.id.solutionText);
+        Button buttonClose = dialogView.findViewById(R.id.buttonClose);
+
+        solutionTextView.setText(solutionText);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonClose.setOnClickListener(v -> dialog.dismiss());
+    }
+    private  void layLoiGiai(String problem) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
@@ -309,16 +321,17 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(GenerateContentResponse result) {
                     String solutionText = result.getText();
-                    editResult.setText(solutionText);
+                    showSolutionDialog(solutionText);
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
                     t.printStackTrace();
                 }
-            }, this.getMainExecutor());
+            }, MainActivity.this.getMainExecutor());
         }
     }
+
     private void saveToDatabase(String problem, String result) {
         new Thread(() -> {
             db.historyDao().insert(new HistoryItem(problem, result));

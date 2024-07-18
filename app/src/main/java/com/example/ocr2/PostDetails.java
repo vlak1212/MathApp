@@ -2,6 +2,8 @@ package com.example.ocr2;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -20,12 +22,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ocr2.Adapter.CommentAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class PostDetails extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final long TARGET_IMAGE_SIZE = 900 * 1024; // 900KB
 
     private TextView textViewPostTitle, textViewPostEmail, textViewPostContent;
     private ImageView imageViewPost;
@@ -108,13 +114,50 @@ public class PostDetails extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             try {
-                selectedCommentImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                imageViewCommentSelected.setImageBitmap(selectedCommentImageBitmap);
+                Uri imageUri = data.getData();
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                Bitmap originalBitmap = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+
+                if (getImageSize(originalBitmap) > MAX_IMAGE_SIZE) {
+                    Toast.makeText(this, "Ảnh quá lớn, vui lòng chọn ảnh khác dưới 5MB.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Bitmap resizedBitmap = resizeBitmapToMaxSize(originalBitmap, TARGET_IMAGE_SIZE);
+
+                imageViewCommentSelected.setImageBitmap(resizedBitmap);
                 imageViewCommentSelected.setVisibility(View.VISIBLE);
+                selectedCommentImageBitmap = resizedBitmap;
+
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(this, "Không thể xử lý ảnh. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private Bitmap resizeBitmapToMaxSize(Bitmap bitmap, long maxSize) {
+        int quality = 100;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap resizedBitmap = bitmap;
+
+        while (getImageSize(resizedBitmap) > maxSize && quality > 10) {
+            baos.reset();
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            byte[] byteArray = baos.toByteArray();
+            resizedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            quality -= 10;
+        }
+
+        return resizedBitmap;
+    }
+
+    private long getImageSize(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] byteArray = baos.toByteArray();
+        return byteArray.length;
     }
 
     private void postComment() {
@@ -134,7 +177,6 @@ public class PostDetails extends AppCompatActivity {
                 public void onCallback(String email) {
                     if (email != null) {
                         sendEmail(email);
-                    } else {
                     }
                 }
             });
@@ -142,15 +184,15 @@ public class PostDetails extends AppCompatActivity {
             emptyComment();
         }
     }
+
     private void sendEmail(String email) {
-        String emailsend = email;
         String emailsubject = "Email từ MathApp";
         String emailbody = "Có người vừa bình luận về câu hỏi của bạn trên MathApp";
 
         Email javaMailAPI = new Email(this, email, emailsubject, emailbody);
-
         javaMailAPI.execute();
     }
+
     private void emptyComment() {
         Toast.makeText(this, "Ô bình luận không được phép trống", Toast.LENGTH_SHORT).show();
     }
