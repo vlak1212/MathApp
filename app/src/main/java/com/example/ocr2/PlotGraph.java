@@ -81,7 +81,6 @@ public class PlotGraph extends AppCompatActivity {
         }
     }
 
-
     private void addInput(String labelText, String hint) {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -102,7 +101,6 @@ public class PlotGraph extends AppCompatActivity {
 
         inputBox.addView(layout);
     }
-
 
     private void plotGraph() {
         double[] coefficients = new double[equationType + 1];
@@ -159,11 +157,12 @@ public class PlotGraph extends AppCompatActivity {
         graphView.addSeries(series);
 
         graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setMinX(-10);
-        graphView.getViewport().setMaxX(10);
+        graphView.getViewport().setMinX(xStart);
+        graphView.getViewport().setMaxX(xEnd);
         graphView.getViewport().setYAxisBoundsManual(true);
         graphView.getViewport().setMinY(-10);
         graphView.getViewport().setMaxY(10);
+
         graphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.BOTH);
         graphView.getGridLabelRenderer().setHorizontalAxisTitle("X");
         graphView.getGridLabelRenderer().setVerticalAxisTitle("Y");
@@ -175,17 +174,9 @@ public class PlotGraph extends AppCompatActivity {
         graphView.getViewport().setScrollable(true);
         graphView.getViewport().setScrollableY(true);
 
-        graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setYAxisBoundsManual(true);
-
-        graphView.getGridLabelRenderer().setHorizontalAxisTitle("X");
-        graphView.getGridLabelRenderer().setNumHorizontalLabels(21);
-
-        graphView.getGridLabelRenderer().setVerticalAxisTitle("Y");
-        graphView.getGridLabelRenderer().setNumVerticalLabels(21);
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(11); // Adjust the number of labels
+        graphView.getGridLabelRenderer().setNumVerticalLabels(11);   // Adjust the number of labels
     }
-
-
 
     private double calculateY(int type, double[] coefficients, double x) {
         double y = 0;
@@ -216,4 +207,3 @@ public class PlotGraph extends AppCompatActivity {
     }
 
 }
-

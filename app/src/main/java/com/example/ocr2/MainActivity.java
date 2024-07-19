@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (editTextResult.getText() != null) {
-                    hoiGemini(String.valueOf(editTextResult.getText()));
+                    hoiGemini(editTextResult.getText().toString());
                 } else {
                     Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
                 }
@@ -243,27 +244,35 @@ public class MainActivity extends AppCompatActivity {
         return resultText.toString();
     }
 
-    private void hoiGemini(String txt) {
+    private void hoiGemini(String problemText) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+
         Content content = new Content.Builder()
-                .addText("Chỉ trả lời kết quả chính xác theo toán học của bài toán trên, nếu có biến cần tìm (ví dụ x,y,z t) thì đưa ra x = , không cần giải thích")
-                .addText(txt)
+                .addText("Phân tích rồi giải bài toán trên nhưng không in ra, chỉ in kết quả cuối cùng sau khi phân tích.")
+                .addText(problemText)
                 .build();
+
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
                 @Override
                 public void onSuccess(GenerateContentResponse result) {
                     String resultText = result.getText();
+
                     editResult.setText(resultText);
-                    saveToDatabase(txt, resultText);
+                    saveToDatabase(problemText, resultText);
+
                     buttonSolution.setVisibility(View.VISIBLE);
                 }
+
                 @Override
                 public void onFailure(Throwable t) {
                     t.printStackTrace();
+                    Toast.makeText(MainActivity.this, "Lỗi khi lấy kết quả từ mô hình AI", Toast.LENGTH_SHORT).show();
                 }
             }, this.getMainExecutor());
         }
@@ -273,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         Content content = new Content.Builder()
-                .addText("In phép toán hoặc bài toán trong ảnh trên thành text")
+                .addText("In phép toán hoặc bài toán trong ảnh trên thành text đại diện cho bài toán đó, sử dụng dấu ngoặc nếu cần thiết (phân số,..)")
                 .addImage(img)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -311,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         Content content = new Content.Builder()
-                .addText("Giải chi tiết bài toán sau:")
+                .addText("Giải chi tiết bài toán sau")
                 .addText(problem)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
