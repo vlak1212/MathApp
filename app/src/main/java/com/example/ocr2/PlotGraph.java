@@ -174,8 +174,8 @@ public class PlotGraph extends AppCompatActivity {
         graphView.getViewport().setScrollable(true);
         graphView.getViewport().setScrollableY(true);
 
-        graphView.getGridLabelRenderer().setNumHorizontalLabels(11); // Adjust the number of labels
-        graphView.getGridLabelRenderer().setNumVerticalLabels(11);   // Adjust the number of labels
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(9);
+        graphView.getGridLabelRenderer().setNumVerticalLabels(11);
     }
 
     private double calculateY(int type, double[] coefficients, double x) {

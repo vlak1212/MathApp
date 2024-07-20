@@ -112,7 +112,8 @@ public class FirebaseHelper {
 
 
     public static void getAllCommentsForPost(String postId, final CommentCallback callback) {
-        commentsRef.whereEqualTo("postId", postId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        commentsRef.whereEqualTo("postId", postId)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -139,11 +140,13 @@ public class FirebaseHelper {
 
     public static void addComment(Comment comment) {
         String imageData = convertImageToBase64(comment.getImage());
+        long timestamp = System.currentTimeMillis();
         Map<String, Object> C = new HashMap<>();
         C.put("postId", comment.getPostId());
         C.put("email", comment.getEmail());
         C.put("content", comment.getContent());
         C.put("image", imageData);
+        C.put("timestamp", timestamp);
         commentsRef.add(C);
     }
 

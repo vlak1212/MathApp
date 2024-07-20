@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
         Content content = new Content.Builder()
-                .addText("Phân tích rồi giải bài toán trên nhưng không in ra, chỉ in kết quả cuối cùng sau khi phân tích.")
+                .addText("Phân tích rồi giải bài toán trên nhưng không in ra, chỉ đưa kết quả cuối cùng sau khi phân tích.")
                 .addText(problemText)
                 .build();
 
