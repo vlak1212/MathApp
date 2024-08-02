@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -46,6 +47,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private HistoryDatabase db;
@@ -311,23 +313,21 @@ public class MainActivity extends AppCompatActivity {
 
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-                @Override
-                public void onSuccess(GenerateContentResponse result) {
-                    String solutionText = result.getText();
+        response.addListener(() -> {
+            try {
+                GenerateContentResponse result = response.get();
+                String solutionText = result.getText();
+
+                runOnUiThread(() -> {
                     showSolutionDialog(convertToJqMath(solutionText));
                     String finalResultText = getResult(solutionText);
                     saveToDatabase(problemText, finalResultText);
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    t.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Lỗi khi lấy kết quả từ mô hình AI", Toast.LENGTH_SHORT).show();
-                }
-            }, this.getMainExecutor());
-        }
+                });
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Lỗi khi lấy kết quả từ mô hình AI", Toast.LENGTH_SHORT).show());
+            }
+        }, ContextCompat.getMainExecutor(this));
     }
 
     private String getResult(String solutionText) {
@@ -457,19 +457,19 @@ public class MainActivity extends AppCompatActivity {
                 .addImage(img)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-                @Override
-                public void onSuccess(GenerateContentResponse result) {
-                    String resultText = result.getText();
-                    mathViewProblem.setText(convertToJqMath(resultText));
-                }
-                @Override
-                public void onFailure(Throwable t) {
-                    t.printStackTrace();
-                }
-            }, this.getMainExecutor());
-        }
+
+        response.addListener(() -> {
+            try {
+                GenerateContentResponse result = response.get();
+                String resultText = result.getText();
+
+                runOnUiThread(() -> mathViewProblem.setText(convertToJqMath(resultText)));
+
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Lỗi khi lấy kết quả từ mô hình AI", Toast.LENGTH_SHORT).show());
+            }
+        }, ContextCompat.getMainExecutor(this));
     }
 
     private void showSolutionDialog(String solutionText) {
