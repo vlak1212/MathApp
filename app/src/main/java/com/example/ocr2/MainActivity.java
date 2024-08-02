@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.google.ai.client.generativeai.GenerativeModel;
@@ -36,9 +38,14 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.squareup.picasso.Picasso;
+import com.zanvent.mathview.MathView;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.io.IOException;
-
+import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
     private HistoryDatabase db;
@@ -47,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_PICK = 2;
 
     private ImageView imageView;
-    private EditText editTextResult;
+    private MathView mathViewProblem;
+    private TextView txtViewProblem;
+    private MathView mathViewResult;
 
     private Button buttonSolution;
-    private EditText editResult;
+    private Button buttonSolveWithAI;
 
     private Bitmap imgP;
     private String txt;
@@ -61,18 +70,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int REQUEST_STORAGE_PERMISSION = 101;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         imageView = findViewById(R.id.imageView);
-        editTextResult = findViewById(R.id.Problems);
-        editResult = findViewById(R.id.Result);
+        mathViewProblem = findViewById(R.id.Problems);
+        txtViewProblem = findViewById(R.id.Problems1);
+        txtViewProblem.setVisibility(View.GONE);
+        //mathViewResult = findViewById(R.id.Result);
         Button buttonCapture = findViewById(R.id.buttonCapture);
         Button buttonUpload = findViewById(R.id.buttonUpload);
-        Button buttonAIsolve  = findViewById(R.id.solveWithAI);
-        buttonSolution = findViewById(R.id.buttonSolution);
+        buttonSolveWithAI = findViewById(R.id.solveWithAI);
+        //buttonSolution = findViewById(R.id.buttonSolution);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
@@ -96,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
                 return true;
             } else
-            return false;
+                return false;
         });
         db = HistoryDatabase.getInstance(this);
         buttonCapture.setOnClickListener(v -> {
@@ -115,24 +126,65 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonSolveWithAI.setOnClickListener(v -> {
+            if (mathViewProblem.getText() != null) {
+                hoiGemini(mathViewProblem.getText().toString());
+            } else {
+                Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mathViewProblem.setOnClickListener(v -> switchToTextView());
 
+        txtViewProblem.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                switchToMathView();
+            }
+        });
 
-        buttonAIsolve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editTextResult.getText() != null) {
-                    hoiGemini(editTextResult.getText().toString());
-                } else {
-                    Toast.makeText(MainActivity.this, "Không có bài toán", Toast.LENGTH_SHORT).show();
+        txtViewProblem.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                int[] location = new int[2];
+                txtViewProblem.getLocationOnScreen(location);
+                float x = event.getRawX() + txtViewProblem.getLeft() - location[0];
+                float y = event.getRawY() + txtViewProblem.getTop() - location[1];
+                if (x < 0 || x > txtViewProblem.getRight() - txtViewProblem.getLeft() || y < 0 || y > txtViewProblem.getBottom() - txtViewProblem.getTop()) {
+                    switchToMathView();
                 }
             }
+            return false;
         });
-        buttonSolution.setOnClickListener(v -> {
-            if (!editTextResult.getText().toString().isEmpty()) {
-                layLoiGiai(editTextResult.getText().toString());
+        ConstraintLayout rootLayout = findViewById(R.id.view);
+        rootLayout.setOnTouchListener((v, event) -> {
+            if (txtViewProblem.getVisibility() == View.VISIBLE) {
+                switchToMathView();
             }
+            return false;
         });
     }
+
+    private void switchToTextView() {
+        txtViewProblem.setVisibility(View.VISIBLE);
+        mathViewProblem.setVisibility(View.GONE);
+        txtViewProblem.setText(mathViewProblem.getText());
+    }
+
+    private void switchToMathView() {
+        mathViewProblem.setVisibility(View.VISIBLE);
+        txtViewProblem.setVisibility(View.GONE);
+        mathViewProblem.setText(convertToJqMath(txtViewProblem.getText().toString()));
+    }
+
+
+
+//        buttonSolution.setOnClickListener(v -> {
+//            if (!mathViewProblems.getText().toString().isEmpty()) {
+//                layLoiGiai(mathViewProblems.getText().toString());
+//            }
+//        });
+
+
+
+
     private boolean getCameraPermissionStatus() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getBoolean(CAMERA_PERMISSION_GRANTED, false);
@@ -142,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getBoolean(STORAGE_PERMISSION_GRANTED, false);
     }
+
     private void showCameraPermissionDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Yêu cầu Quyền Sử dụng Camera")
@@ -165,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Từ chối", null)
                 .show();
     }
+
     private void requestCameraPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
@@ -176,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 REQUEST_STORAGE_PERMISSION);
     }
+
     private void saveCameraPermissionStatus(boolean granted) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         prefs.edit().putBoolean(CAMERA_PERMISSION_GRANTED, granted).apply();
@@ -243,7 +298,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return resultText.toString();
     }
-
     private void hoiGemini(String problemText) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
@@ -251,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
         Content content = new Content.Builder()
-                .addText("Phân tích rồi giải bài toán trên nhưng không in ra, chỉ đưa kết quả cuối cùng sau khi phân tích.")
+                .addText("Luôn luôn giải chi tiết bài toán sau bằng các bước (Bước 1, Bước 2, Bước 3,.. Kết quả ở đầu dòng), Kết quả ở dòng cuối, đầu dòng cuối là 'Kết quả: '")
                 .addText(problemText)
                 .build();
 
@@ -261,12 +315,10 @@ public class MainActivity extends AppCompatActivity {
             Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
                 @Override
                 public void onSuccess(GenerateContentResponse result) {
-                    String resultText = result.getText();
-
-                    editResult.setText(resultText);
-                    saveToDatabase(problemText, resultText);
-
-                    buttonSolution.setVisibility(View.VISIBLE);
+                    String solutionText = result.getText();
+                    showSolutionDialog(convertToJqMath(solutionText));
+                    String finalResultText = getResult(solutionText);
+                    saveToDatabase(problemText, finalResultText);
                 }
 
                 @Override
@@ -277,50 +329,66 @@ public class MainActivity extends AppCompatActivity {
             }, this.getMainExecutor());
         }
     }
-    private void anhGemini(Bitmap img) {
-        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
-                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        Content content = new Content.Builder()
-                .addText("In phép toán hoặc bài toán trong ảnh trên thành text đại diện cho bài toán đó, sử dụng dấu ngoặc nếu cần thiết (phân số,..)")
-                .addImage(img)
-                .build();
-        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-                @Override
-                public void onSuccess(GenerateContentResponse result) {
-                    String resultText = result.getText();
-                    editTextResult.setText(resultText);
-                }
-                @Override
-                public void onFailure(Throwable t) {
-                    t.printStackTrace();
-                }
-            }, this.getMainExecutor());
+
+    private String getResult(String solutionText) {
+        String keyword = "Kết quả: ";
+        String keyword1 = "Kết quả";
+        int index = solutionText.indexOf(keyword);
+        int index1 = solutionText.indexOf(keyword1);
+        if (index != -1 && index1 != -1) {
+            return solutionText.substring(index + keyword.length()).trim();
+        } else if (index != -1 && index1 == -1) {
+            return solutionText.substring(index + keyword.length()).trim();
+        } else if (index == -1 && index1 != -1) {
+            return solutionText.substring(index1 + keyword.length()).trim();
+        } else {
+            return solutionText;
         }
     }
-    private void showSolutionDialog(String solutionText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
-        builder.setView(dialogView);
 
-        TextView solutionTextView = dialogView.findViewById(R.id.solutionText);
-        Button buttonClose = dialogView.findViewById(R.id.buttonClose);
+//    private void hoiWolframAlpha(String problemText) {
+//        new Thread(() -> {
+//            try {
+//                String query = "https://api.wolframalpha.com/v1/result?i=" + URLEncoder.encode(convertToText(problemText), "UTF-8") + "&appid=477HYG-LU8K72998V";
+//                URL url = new URL(query);
+//
+//                // Open connection
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod("GET");
+//
+//                // Get the response
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                StringBuilder response = new StringBuilder();
+//                String line;
+//
+//                while ((line = reader.readLine()) != null) {
+//                    response.append(line);
+//                }
+//
+//                reader.close();
+//                connection.disconnect();
+//                String resultText = response.toString();
+//
+//                // Update UI with the result
+//                runOnUiThread(() -> {
+//                    mathViewResult.setText(resultText);
+//                    saveToDatabase(problemText, resultText);
+//                    buttonSolution.setVisibility(View.VISIBLE);
+//                });
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Lỗi khi lấy kết quả từ Wolfram Alpha", Toast.LENGTH_SHORT).show());
+//            }
+//        }).start();
+//    }
 
-        solutionTextView.setText(solutionText);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        buttonClose.setOnClickListener(v -> dialog.dismiss());
-    }
-    private  void layLoiGiai(String problem) {
+    private String convertToText(String problem) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         Content content = new Content.Builder()
-                .addText("Giải chi tiết bài toán sau")
+                .addText("Chuyển text dạng mathView trên về dạng text thường")
                 .addText(problem)
                 .build();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -329,8 +397,7 @@ public class MainActivity extends AppCompatActivity {
             Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
                 @Override
                 public void onSuccess(GenerateContentResponse result) {
-                    String solutionText = result.getText();
-                    showSolutionDialog(solutionText);
+                    String txt = String.valueOf(result);
                 }
 
                 @Override
@@ -339,7 +406,113 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, MainActivity.this.getMainExecutor());
         }
+        return txt;
     }
+
+    public static String convertToJqMath(String plainText) {
+        String jqMathText = plainText;
+
+        jqMathText = jqMathText.replaceAll("\\^(\\d+)", "^{ $1 }");
+
+        jqMathText = jqMathText.replaceAll("_([a-zA-Z0-9]+)", "_{ $1 }");
+
+        jqMathText = jqMathText.replace("\\$", "$");
+        jqMathText = jqMathText.replace("\\\\", "\\");
+
+        jqMathText = jqMathText.replace("{", "\\{");
+        jqMathText = jqMathText.replace("}", "\\}");
+
+        jqMathText = jqMathText.replaceAll("\\\\text\\{(.*?)\\}", "$1");
+        jqMathText = jqMathText.replaceAll("\\\\html\\{(.*?)\\}", "$1");
+
+        jqMathText = jqMathText.replace("\\bo", "\\mathbf");
+        jqMathText = jqMathText.replace("\\it", "\\textit");
+        jqMathText = jqMathText.replace("\\bi", "\\textbf{\\textit");
+
+        jqMathText = jqMathText.replace("\\sc", "\\mathscr");
+        jqMathText = jqMathText.replace("\\fr", "\\mathfrak");
+
+        jqMathText = jqMathText.replace("\\ov", "\\overline");
+
+        jqMathText = jqMathText.replaceAll("\\\\table\\{(.*?)\\}", "\\begin{matrix} $1 \\end{matrix}");
+
+        jqMathText = jqMathText.replaceAll("\\$\\$(.*?)\\$\\$", "\\[ $1 \\]");
+        jqMathText = jqMathText.replaceAll("\\$(.*?)\\$", "\\( $1 \\)");
+
+        jqMathText = jqMathText.replace("↖", "\\overset");
+        jqMathText = jqMathText.replace("↙", "\\underset");
+
+        jqMathText = jqMathText.replaceAll("Bước", "\\\\Bước");
+        jqMathText = jqMathText.replaceAll("Kết quả", "\\\\Kết quả");
+
+
+        return jqMathText;
+    }
+    private void anhGemini(Bitmap img) {
+        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
+                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+        Content content = new Content.Builder()
+                .addText("In phép toán hoặc bài toán trong ảnh trên thành text")
+                .addImage(img)
+                .build();
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+                @Override
+                public void onSuccess(GenerateContentResponse result) {
+                    String resultText = result.getText();
+                    mathViewProblem.setText(convertToJqMath(resultText));
+                }
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            }, this.getMainExecutor());
+        }
+    }
+
+    private void showSolutionDialog(String solutionText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        builder.setView(dialogView);
+
+        MathView solutionMathView = dialogView.findViewById(R.id.solutionText);
+        Button buttonClose = dialogView.findViewById(R.id.buttonClose);
+        solutionText = solutionText.replaceAll("\\\\", "<br/>");
+        solutionMathView.setText(solutionText);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonClose.setOnClickListener(v -> dialog.dismiss());
+    }
+//
+//    private void layLoiGiai(String problem) {
+//        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
+//                "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
+//        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+//        Content content = new Content.Builder()
+//                .addText("Giải chi tiết bài toán sau thành dạng text")
+//                .addText(problem)
+//                .build();
+//        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+//                @Override
+//                public void onSuccess(GenerateContentResponse result) {
+//                    String solutionText = result.getText();
+//                    showSolutionDialog(convertToJqMath(solutionText));
+//                }
+//
+//                @Override
+//                public void onFailure(Throwable t) {
+//                    t.printStackTrace();
+//                }
+//            }, MainActivity.this.getMainExecutor());
+//        }
+//    }
 
     private void saveToDatabase(String problem, String result) {
         new Thread(() -> {

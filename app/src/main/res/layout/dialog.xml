@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.zanvent.mathview.MathView
             android:id="@+id/solutionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

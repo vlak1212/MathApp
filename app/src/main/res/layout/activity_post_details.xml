@@ -12,118 +12,137 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Câu hỏi:"
-            android:textStyle="bold"
-            style="@style/MarkerText"
-            android:textSize="35sp"
-            android:layout_marginBottom="4dp" />
+            android:background="@drawable/border"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/PostTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:background="@color/fui_transparent"
-            android:textSize="30sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Câu hỏi:"
+                android:textStyle="bold"
+                style="@style/MarkerText"
+                android:textSize="35sp"
+                android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:id="@+id/PostEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="15sp"
-            android:background="@color/fui_transparent"
-            android:layout_marginTop="4dp" />
+            <TextView
+                android:id="@+id/PostTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:background="@color/fui_transparent"
+                android:textSize="30sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nội dung:"
-            android:textStyle="bold"
-            style="@style/MarkerText"
-            android:textSize="30sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp" />
+            <TextView
+                android:id="@+id/PostEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textSize="15sp"
+                android:background="@color/fui_transparent"
+                android:layout_marginTop="4dp"
+                android:gravity="end"/>
 
-        <TextView
-            android:id="@+id/PostContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/fui_transparent"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nội dung:"
+                android:textStyle="bold"
+                style="@style/MarkerText"
+                android:textSize="30sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
 
-        <ImageView
-            android:id="@+id/imageViewPost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_background"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            <TextView
+                android:id="@+id/PostContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/fui_transparent"
+                android:layout_marginTop="8dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bình luận:"
-            android:textStyle="bold"
-            style="@style/MarkerText"
-            android:textSize="35sp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp" />
+            <ImageView
+                android:id="@+id/imageViewPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edittext_background"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true" />
 
-        <EditText
-            android:id="@+id/CommentEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_background"
-            android:hint="Email"
-            android:layout_marginTop="8dp" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/CommentContent"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_background"
-            android:hint="* Bình luận"
-            android:layout_marginTop="8dp" />
+            android:background="@drawable/border"
+            android:padding="16dp"
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonCommentImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chọn ảnh"
-            style="@style/MarkerText"
-            android:textSize="30sp"
-            android:background="@drawable/button_background3"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bình luận:"
+                android:textStyle="bold"
+                style="@style/MarkerText"
+                android:textSize="35sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonPostComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            style="@style/MarkerText"
-            android:textSize="30sp"
-            android:background="@drawable/button_background3"
-            android:text="Đăng bình luận" />
+            <EditText
+                android:id="@+id/CommentEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:hint="Email"
+                android:layout_marginTop="8dp" />
 
-        <ImageView
-            android:id="@+id/imageCommentSelected"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true" />
+            <EditText
+                android:id="@+id/CommentContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:hint="* Bình luận"
+                android:layout_marginTop="8dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/BG2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="16dp" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonCommentImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chọn ảnh"
+                style="@style/MarkerText"
+                android:textSize="30sp"
+                android:background="@drawable/button_background3"
+                android:layout_marginTop="8dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonPostComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                style="@style/MarkerText"
+                android:textSize="30sp"
+                android:background="@drawable/button_background3"
+                android:text="Đăng bình luận" />
+
+            <ImageView
+                android:id="@+id/imageCommentSelected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/BG2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="16dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

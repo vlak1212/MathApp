@@ -3,12 +3,13 @@ package com.example.ocr2.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ocr2.HistoryItem;
 import com.example.ocr2.R;
+import com.zanvent.mathview.MathView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +48,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         HistoryItem currentItem = historyList.get(position);
-        holder.textEquation.setText(currentItem.equation);
-        holder.textSolution.setText(currentItem.solution);
+        holder.textProblem.setText(currentItem.equation.replaceAll("\\\\", "<br/>"));
+        holder.textSolution.setText(currentItem.solution.replaceAll("\\\\", "<br/>"));
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -74,12 +75,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
     static class HistoryViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textEquation;
-        private TextView textSolution;
+        private MathView textProblem;
+        private MathView textSolution;
 
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            textEquation = itemView.findViewById(R.id.HProblems);
+            textProblem = itemView.findViewById(R.id.HProblems);
             textSolution = itemView.findViewById(R.id.HSolution);
         }
     }

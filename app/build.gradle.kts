@@ -68,7 +68,8 @@ dependencies {
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.squareup.picasso:picasso:2.71828")
     annotationProcessor("androidx.room:room-compiler:2.5.0")
-
+    implementation("org.jsoup:jsoup:1.15.3")
+    implementation("com.github.frhnfrq:MathView:1.2")
 
 
 }
