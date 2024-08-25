@@ -199,11 +199,11 @@ public class Calculator extends AppCompatActivity {
         return new Object() {
             int pos = -1, ch;
 
-            void nextChar() {
+            void nextChar() { // di chuyển đến ký tự tiếp theo
                 ch = (++pos < str.length()) ? str.charAt(pos) : -1;
             }
 
-            boolean eat(int charToEat) {
+            boolean eat(int charToEat) { // Bỏ qua khoảng trắng
                 while (ch == ' ') nextChar();
                 if (ch == charToEat) {
                     nextChar();
@@ -215,29 +215,32 @@ public class Calculator extends AppCompatActivity {
             double parse() {
                 nextChar();
                 double x = parseExpression();
-                if (pos < str.length()) throw new RuntimeException("Không mong đợi: " + (char) ch);
+                if (pos < str.length()) throw new RuntimeException("Không tính được" + (char) ch); //còn chuỗi sau khi phân tích
                 return x;
             }
 
-            double parseExpression() {
+            double parseExpression() { // +, -
                 double x = parseTerm();
-                for (; ; ) {
+                for (;;) {
                     if (eat('+')) x += parseTerm();
                     else if (eat('-')) x -= parseTerm();
                     else return x;
                 }
             }
 
-            double parseTerm() {
+            double parseTerm() { // *, /
                 double x = parseFactor();
-                for (; ; ) {
+                for (;;) {
                     if (eat('*')) x *= parseFactor();
-                    else if (eat('/')) x /= parseFactor();
-                    else return x;
+                    else if (eat('/')) {
+                        double divisor = parseFactor();
+                        if (divisor == 0) throw new ArithmeticException("Phần mẫu không được bằng 0");
+                        x /= divisor;
+                    } else return x;
                 }
             }
 
-            double parseFactor() {
+            double parseFactor() { // số, hàm số, ngoặc, luy thừa
                 if (eat('+')) return parseFactor();
                 if (eat('-')) return -parseFactor();
 
@@ -246,20 +249,26 @@ public class Calculator extends AppCompatActivity {
                 if (eat('(')) {
                     x = parseExpression();
                     if (!eat(')')) throw new RuntimeException("Thiếu dấu ngoặc đóng");
-                } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
+                } else if ((ch >= '0' && ch <= '9') || ch == '.') {
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
                     x = Double.parseDouble(str.substring(startPos, this.pos));
-                } else if (ch >= 'a' && ch <= 'z') { // functions
+                } else if (ch >= 'a' && ch <= 'z') {
                     while (ch >= 'a' && ch <= 'z') nextChar();
                     String func = str.substring(startPos, this.pos);
                     x = parseFactor();
-                    if (func.equals("sqrt")) x = Math.sqrt(x);
-                    else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+                    if (func.equals("sqrt")) {
+                        if (x < 0) throw new ArithmeticException("Không thể tính căn bậc 2 của số âm");
+                        x = Math.sqrt(x);
+                    } else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
                     else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
                     else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
-                    else if (func.equals("ln")) x = Math.log(x);
-                    else if (func.equals("log")) x = Math.log10(x);
-                    else throw new RuntimeException("Không rõ " + func);
+                    else if (func.equals("ln")) {
+                        if (x <= 0) throw new ArithmeticException("Không thể tính logarit của số âm hoặc 0");
+                        x = Math.log(x);
+                    } else if (func.equals("log")) {
+                        if (x <= 0) throw new ArithmeticException("Không thể tính logarit cơ số 10 của số âm hoặc 0");
+                        x = Math.log10(x);
+                    } else throw new RuntimeException("Không tính được, chạy quá lâu" + func);
                 } else {
                     throw new RuntimeException("Không có kết quả: " + (char) ch);
                 }

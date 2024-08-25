@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
         Content content = new Content.Builder()
-                .addText("Luôn luôn giải chi tiết bài toán sau bằng các bước (Bước 1, Bước 2, Bước 3,.. Kết quả ở đầu dòng), Kết quả ở dòng cuối, đầu dòng cuối là 'Kết quả: '")
+                .addText("Giải bài toán sau, Luôn luôn giải chi tiết bài toán sau bằng các bước (Bước 1, Bước 2, Bước 3,.. Kết quả ở đầu dòng), Kết quả ở dòng cuối, đầu dòng cuối là 'Kết quả: '")
                 .addText(problemText)
                 .build();
 
@@ -448,6 +448,8 @@ public class MainActivity extends AppCompatActivity {
 
         return jqMathText;
     }
+
+    
     private void anhGemini(Bitmap img) {
         GenerativeModel gm = new GenerativeModel("gemini-1.5-flash",
                 "AIzaSyDh0zhgkKH4xpH1prw1rDrI7N1O0FR1EF4");
